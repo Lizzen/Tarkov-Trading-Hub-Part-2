@@ -1,0 +1,58 @@
+body {
+  background: #0c0c12;
+  color: #9a8865;
+  font-family: bender,Source Sans Pro,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+  font-weight: 700;
+}
+.contenido {
+  height: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  margin-left: 13%;
+}
+
+.titulo-inventario h1 {
+  float: left;
+  margin-right: 10px;
+}
+
+.titulo-inventario h3 {
+  float: right;
+  margin-right: 120px;
+  margin-top: 30px;
+}
+
+footer {
+  margin-left: 6%;
+}
+
+.titulo-inventario {
+  overflow: auto;
+}
+
+.inventario {
+  display: inline-grid;
+  background-color: #3d3d3d;
+  overflow-y: auto;
+  max-height: calc(100vh - 250px);
+  border:solid;
+  grid-template-columns: repeat(25, 70px);
+  grid-template-rows: repeat(10, 70px);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+ul.inventario {
+  list-style-type: none;
+  padding-inline-start: 0px;
+
+}
+
+.inventario img {
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,45 @@
+body {
+  overflow-x: hidden;
+  font-family: bender,Source Sans Pro,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+  font-weight: 700;
+}
+
+header {
+  background-color: #171717;
+  overflow: hidden;
+  border: 2px solid #9a8865;
+  width: 100%;
+}
+.logo {
+  float: left;
+}
+
+.saludo {
+  float: right;
+  text-align: right;
+  margin-top: 22px;
+  margin-right: 40px;
+}
+
+.btn {
+  font-size: 12px;
+  background-color: #9a8865;
+  color: white;
+  padding: 5px 25px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.logo img {
+  height: 100px;
+  margin-left: 30px;
+  transition: all 0.3s ease;
+  filter: brightness(60%);
+}
+
+.logo:hover img {
+  transform: translateY(-5px);
+  filter: brightness(1.2);
+}

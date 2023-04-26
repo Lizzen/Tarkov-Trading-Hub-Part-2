@@ -1,0 +1,51 @@
+body {
+  background-color: #0c0c12;
+  color: #9a8865;
+  font-size: 25px;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: bender,Source Sans Pro,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+  font-weight: 700;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px 0;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  background-color: #9a8865;
+  color: white;
+}
+
+tr:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+td a {
+  color: #9a8865;
+  text-decoration: none;
+}
+
+tr:hover > td a {
+  color: black;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
