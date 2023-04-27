@@ -20,10 +20,6 @@ class Item {
         return $inventario;
     }
 
-
-
-
-
     public static function actualizarItemInventario($idUsuario, $item) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $sql = sprintf("UPDATE inventario_usuario 
@@ -40,7 +36,27 @@ class Item {
           echo "Error al actualizar el item en la base de datos";
         }
     }
-    
+
+    public static function aniadirAInventario($item, $idUsuario)
+    {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $nombreItem = $item->getNombreItem();
+        do {
+            $idInv = rand(1, 1000); // Generamos un id aleatorio para el item
+            $comprobacion = sprintf("SELECT id_inv FROM inventario_usuario WHERE id_usuario = %d AND id_inv = %d", $idUsuario, $idInv);
+            $result = $conn->query($comprobacion);
+        } while ($result->num_rows > 0); // Si el id ya existe en la tabla, lo volvemos a intentar
+
+        /*if (!Item_mercado::comprobarPosicionDisponible($item, $idUsuario, $conn)) {
+            return false;
+        }*/
+        $insert = sprintf("INSERT INTO `inventario_usuario` (`id_usuario`, `id_inv`, `nombre_item`) VALUES (%d, %d, '%s')", $idUsuario, $idInv, $nombreItem);
+        if (!$conn->query($insert)) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            return false;
+        }
+        return true;
+    }
 
     private $nombre;
     private $rareza;
