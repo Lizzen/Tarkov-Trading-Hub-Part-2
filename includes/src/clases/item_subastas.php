@@ -5,23 +5,26 @@ namespace es\ucm\fdi\aw\clases;
 use es\ucm\fdi\aw\Aplicacion;
 use es\ucm\fdi\aw\clases\usuarios\Usuario;
 
-class Item_mercado
+class Item_subastas
 {
 
-    public static function itemsVenta($id_usuario)
+    public static function itemsSubastas($id_usuario)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $listaVentas = [];
-        $sql = "SELECT * FROM ventas_mercado WHERE id_usuario != $id_usuario";
+        $listaSubastas = [];
+        $sql = "SELECT * FROM suabstas WHERE id_usuario != $id_usuario";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $listaVentas[] = new Item_mercado($row['id_venta'], $row['nombre_item'], $row['id_usuario'], $row['tipo'], $row['precio'], $row['nombre_intercambio']);
+                $listaVentas[] = new Item_subastas($row['id_subasta'], $row['nombre_item'], $row['id_usuario'], $row['tipo'], $row['precio'], $row['nombre_intercambio']);
             }
         }
-        return $listaVentas;
+        return $listaSubastas;
     }
 
+    public static function subastarItem($item){
+        Item_subastas::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
+    }
 
     public static function comprarItem($item, $id_usuario_comprador)
     {
@@ -37,28 +40,6 @@ class Item_mercado
 
                 // Mandar dinero a vendedor
                 Usuario::sumaDinero($item->getPrecio(), $item->getId_usuario());
-
-                Item_mercado::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
-                break;
-
-            case 'intercambio':
-                // Pasan item a tu inventario ¿comprobar si cabe item?
-                Item::aniadirAInventario($item, $id_usuario_comprador);
-
-                Item_mercado::borraPorItemYUsuario($$item->getNombreItem(), $item->getId_usuario());
-                break;
-
-            case 'dual':
-                // Te quitan dinero y pasan item a tu inventario ¿comprobar si cabe item?
-                Usuario::restaDinero($item->getPrecio(), $id_usuario_comprador);
-                Item::aniadirAInventario($item, $id_usuario_comprador);
-
-                // Mandar dinero y item a vendedor
-                Usuario::sumaDinero($item->getPrecio(), $item->getId_usuario());
-                Item::aniadirAInventario($item, $item->getId_usuario());
-
-                // Eliminar item mercado
-                Item_mercado::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
                 break;
         }
     }
@@ -68,7 +49,7 @@ class Item_mercado
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf(
-            "DELETE FROM ventas_mercado WHERE id_usuario = %d AND nombre_item = '%s'",
+            "DELETE FROM subastas WHERE id_usuario = %d AND nombre_item = '%s'",
             $id_usuario,
             $nombre_item
         );
@@ -83,15 +64,16 @@ class Item_mercado
     public static function getItemPorNombre($nombreItem)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $sql = "SELECT * FROM ventas_mercado WHERE nombre_item='$nombreItem'";
+        $sql = "SELECT * FROM subastas WHERE nombre_item='$nombreItem'";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $item_mercado = new Item_mercado($row['id_venta'], $row['nombre_item'], $row['id_usuario'], $row['tipo'], $row['precio'], $row['nombre_intercambio']);
+            $Item_subastas = new Item_subastas($row['id_subasta'], $row['nombre_item'], $row['id_usuario'], $row['tipo'], $row['precio'], $row['nombre_intercambio']);
             return $item_mercado;
         }
         return null;
     }
+
 
     public static function comprobarPosicionDisponible($x, $y, $anchura, $altura, $idUsuario)
     {
@@ -129,24 +111,22 @@ class Item_mercado
 
 
 
-    private $id_venta;
+    private $id_subasta;
     private $nombre_item;
     private $id_usuario;
     private $tipo;
     private $precio;
-    private $nombre_intercambio;
-    private function __construct($id_venta, $nombre_item, $id_usuario, $tipo, $precio, $nombre_intercambio)
+    private function __construct($id_subasta, $nombre_item, $id_usuario, $tipo, $precio,)
     {
-        $this->id_venta = $id_venta;
+        $this->id_subasta = $id_subasta;
         $this->nombre_item = $nombre_item;
         $this->id_usuario = $id_usuario;
         $this->tipo = $tipo;
         $this->precio = $precio;
-        $this->nombre_intercambio = $nombre_intercambio;
     }
     public function getId()
     {
-        return $this->id_venta;
+        return $this->id_subasta;
     }
     public function getNombreItem()
     {
@@ -166,11 +146,6 @@ class Item_mercado
     public function getPrecio()
     {
         return $this->precio;
-    }
-
-    public function getNombre_intercambio()
-    {
-        return $this->nombre_intercambio;
     }
 
     public function getNombreUsuario($id)

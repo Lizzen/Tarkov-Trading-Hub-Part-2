@@ -44,6 +44,10 @@ $app = Aplicacion::getInstance();
 				<details>
 					<summary>Subastas</summary>
 					<a href="./subastas.php" class="a-inventory">Inicio</a>
+					<a href="./subastas.php" class="a-inventory">Subastar</a>
+					<a href="./subastas.php" class="a-inventory">Mis subastas</a>
+					<a href="./subastas.php" class="a-inventory">Pujar</a>
+					<a href="./subastas.php" class="a-inventory">Mis pujas</a>
 				</details>
 			</div>
 		</div>
