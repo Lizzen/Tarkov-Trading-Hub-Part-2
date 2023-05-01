@@ -16,13 +16,25 @@ class Item_subastas
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $listaVentas[] = new Item_subastas($row['id_subasta'], $row['nombre_item'], $row['id_usuario'], $row['tipo'], $row['precio'], $row['nombre_intercambio']);
+                $listaVentas[] = new Item_subastas($row['id_subasta'], $row['nombre_item'], $row['id_usuario'], $row['tipo'], $row['precio']);
             }
         }
         return $listaSubastas;
     }
 
     public static function subastarItem($item){
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $nombreItem = $item->getNombreItem();
+
+        do {
+            $idSubasta = rand(1, 1000); 
+            $comprobacion = sprintf("SELECT id_subasta FROM subastas WHERE id_usuario = %d AND id_subasta = %d", $idUsuario, $idubasta);
+            $result = $conn->query($comprobacion);
+        } while ($result->num_rows > 0); 
+
+        $insert = sprintf("INSERT INTO `subastas` (`id_subasta`, `id_usuario`, `nombre_item`, `tipo`, `precio`) VALUES (%d, %d, '%s', '%s', %d)", $idSubasta, $idUsuario, $nombreItem, $item->getTipo(), $item->getPrecio());
+        $conn->query($insert);
+        
         Item_subastas::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
     }
 
@@ -151,5 +163,10 @@ class Item_subastas
     public function getNombreUsuario($id)
     {
         return Usuario::buscaNombreUsuario($id);
+    }
+
+    public function setPrecioSubasta($precioSubasta)
+    {
+         $this->precio = $precioSubasta;
     }
 }

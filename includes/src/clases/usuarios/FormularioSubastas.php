@@ -24,7 +24,8 @@ class FormularioSubastas extends Formulario
     protected function generaCamposFormulario(&$datos)
     {
         $camposFormulario = <<<EOS
-
+        <div><label>Precio de subasta:</label>
+        <input type="number" min="1" max="9999" step="0.01" name="precioSubasta" required/></div>
         <button class="btn" type="submit" name="subastar">Subastar</button>
         EOS;
         return $camposFormulario;
@@ -32,11 +33,25 @@ class FormularioSubastas extends Formulario
 
     protected function procesaFormulario(&$datos)
     {
+        $precioSubasta = htmlspecialchars(trim(strip_tags($datos['precioSubasta']))) ?? '';
+
+        if (!filter_var($precioSubasta, FILTER_VALIDATE_FLOAT)) {
+            $this->setError('precioSubasta', 'El precio debe ser un número válido.');
+            return false;
+        }
+
+        $precioSubasta = floatval($precioSubasta);
+
+        if ($precioSubasta < 1 || $precioSubasta > 9999) {
+            $this->setError('precioSubasta', 'El precio debe estar entre 1 y 9999.');
+            return false;
+        }
+
+        $this->item->setPrecioSubasta($precioSubasta);
+
         if (isset($datos['subastar'])) {
-            Item::subastarItem($this->item, $this->id_usuario_subasta);
+            Item::subastarItem($this->item);
         }
     }
-
-    
 }
 ?>
