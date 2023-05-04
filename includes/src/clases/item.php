@@ -58,6 +58,24 @@ class Item {
         return true;
     }
 
+    public static function buscaItem($nombreItem)
+    {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = sprintf("SELECT * FROM items U WHERE U.nombre='%s'", $conn->real_escape_string($nombreItem));
+        $rs = $conn->query($query);
+        $result = false;
+        if ($rs) {
+            $fila = $rs->fetch_assoc();
+            if ($fila) {
+                $result = new Item($fila['nombre'], $fila['rareza'], $fila['tamaño_inventario'], $fila['filas'], $fila['columnas'], $fila['pos_x'], $fila['pos_y']);
+            }
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+    }
+
     private $nombre;
     private $rareza;
     private $tamaño_inventario;
@@ -96,23 +114,5 @@ class Item {
 
     public function getY() {
         return $this->pos_y;
-    }
-
-    public static function buscaItem($nombreItem)
-    {
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT * FROM items U WHERE U.nombre='%s'", $conn->real_escape_string($nombreUsuario));
-        $rs = $conn->query($query);
-        $result = false;
-        if ($rs) {
-            $fila = $rs->fetch_assoc();
-            if ($fila) {
-                $result = new Item($fila['nombre'], $fila['rareza'], $fila['tamaño_inventario'], $fila['filas'], $fila['columnas']);
-            }
-            $rs->free();
-        } else {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
-        return $result;
     }
 }
