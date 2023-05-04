@@ -7,16 +7,15 @@ use es\ucm\fdi\aw\clases\usuarios\Usuario;
 
 class Item_subastas
 {
-
     public static function itemsSubastas($id_usuario)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $listaSubastas = [];
-        $sql = "SELECT * FROM suabstas WHERE id_usuario != $id_usuario";
+        $sql = "SELECT * FROM subastas WHERE id_usuario = $id_usuario";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $listaVentas[] = new Item_subastas($row['id_subasta'], $row['nombre_item'], $row['id_usuario'], $row['tipo'], $row['precio']);
+                $listaSubastas[] = new Item_subastas($row['id_subasta'], $row['id_usuario'], $row['nombre_item'], $row['tipo'], $row['precio']);
             }
         }
         return $listaSubastas;
