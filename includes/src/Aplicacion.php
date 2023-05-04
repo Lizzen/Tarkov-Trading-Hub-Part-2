@@ -15,7 +15,7 @@ class Aplicacion
     /**
      * Devuele una instancia de {@see Aplicacion}.
      *
-     * @return Applicacion Obtiene la única instancia de la <code>Aplicacion</code>
+     * @return Aplicacion Obtiene la única instancia de la <code>Aplicacion</code>
      */
     public static function getInstance()
     {
@@ -298,7 +298,7 @@ class Aplicacion
 
     public function paginaError($codigoRespuesta, $tituloPagina, $mensajeError, $explicacion = '')
     {
-        $this->generandoPaginaError = true;
+        $this->generandoError = true;
         http_response_code($codigoRespuesta);
 
         $params = ['tituloPagina' => $tituloPagina, 'contenidoPrincipal' => "<h1>{$mensajeError}</h1><p>{$explicacion}</p>"];
