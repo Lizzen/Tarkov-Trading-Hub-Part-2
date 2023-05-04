@@ -45,7 +45,7 @@ class Item_mercado
                 // Pasan item a tu inventario ¿comprobar si cabe item?
                 Item::aniadirAInventario($item, $id_usuario_comprador);
 
-                Item_mercado::borraPorItemYUsuario($$item->getNombreItem(), $item->getId_usuario());
+                Item_mercado::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
                 break;
 
             case 'dual':

@@ -47,6 +47,7 @@ function listarItems($idUsuario)
 
         </div>
         EOS;
+    }
 }
 
 function listarSubastas()
@@ -106,4 +107,3 @@ function listarSubastas()
 
     return $html;
 }
-?>
