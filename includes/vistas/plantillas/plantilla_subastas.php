@@ -1,6 +1,6 @@
 <?php
 
-use es\ucm\fdi\aw\clases\Item;
+require_once './includes/src/mostrar_subastas.php';
 
 ?>
 
@@ -10,8 +10,7 @@ use es\ucm\fdi\aw\clases\Item;
 <head>
 	<meta charset="UTF-8">
 	<title><?= $params['tituloPagina'] ?></title>
-	<link rel="stylesheet" type="text/css" href="<?= $params['app']->resuelve('/css/subastas.css') ?>" />
-	<script src=""></script>
+	<link rel="stylesheet" href="./css/subastas.css" />
 </head>
 
 <body>
@@ -21,6 +20,7 @@ use es\ucm\fdi\aw\clases\Item;
 	<main>
 		<div class="contenido">
 			<?= $params['contenidoPrincipal'] ?>
+			<?= muestra_subastas() ?>
 		</div>
 	</main>
 	<?php require('includes/vistas/comun/pie.php'); ?>

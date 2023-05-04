@@ -61,8 +61,8 @@ function listarSubastas()
         $precio = $subasta->getPrecio();
         $tipo = $subasta->getTipo();
 
-        $formularioCompra = new FormularioCompra($subasta, $_SESSION['idUsuario']);
-        $botonCompra = $formularioCompra->gestiona();        
+        $formularioSubastas = new FormularioSubastas($subasta, $_SESSION['idUsuario']);
+        $botonPuja = $formularioCompra->gestiona();        
 
         $items .= <<<EOS
         <div class="item">
@@ -83,8 +83,8 @@ function listarSubastas()
                 {$precio} 
             </div>
 
-            <div class="comprar_item">
-                {$botonCompra}
+            <div class="pujar_item">
+                {$botonPuja}
             </div>
 
         </div>
@@ -97,7 +97,7 @@ function listarSubastas()
         <div class = "div-opacidad">Nombre item</div>
         <div class = "div-opacidad">Nombre usuario</div>
         <div class = "div-opacidad">Precio</div>
-        <div class = "div-opacidad">Comprar</div>
+        <div class = "div-opacidad">Pujar</div>
     </div>
     <div class="lista_items">
         {$items}
