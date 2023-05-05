@@ -2,6 +2,7 @@
 
 namespace es\ucm\fdi\aw\clases;
 
+use es\ucm\fdi\aw\clases\Item;
 use es\ucm\fdi\aw\Aplicacion;
 use es\ucm\fdi\aw\clases\usuarios\Usuario;
 
@@ -21,20 +22,21 @@ class Item_subastas
         return $listaSubastas;
     }
 
-    public static function subastarItem($item){
+    public static function subastarItem($item, $idUsuario, $precio){
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $nombreItem = $item->getNombreItem();
+        $nombreItem = $item->getNombre();
 
         do {
             $idSubasta = rand(1, 1000); 
-            $comprobacion = sprintf("SELECT id_subasta FROM subastas WHERE id_usuario = %d AND id_subasta = %d", $idUsuario, $idubasta);
+            $comprobacion = sprintf("SELECT id_subasta FROM subastas WHERE id_usuario = %d AND id_subasta = %d", $idUsuario, $idSubasta);
             $result = $conn->query($comprobacion);
         } while ($result->num_rows > 0); 
 
-        $insert = sprintf("INSERT INTO `subastas` (`id_subasta`, `id_usuario`, `nombre_item`, `tipo`, `precio`) VALUES (%d, %d, '%s', '%s', %d)", $idSubasta, $idUsuario, $nombreItem, $item->getTipo(), $item->getPrecio());
+        $insert = sprintf("INSERT INTO `subastas` (`id_subasta`, `id_usuario`, `nombre_item`, `tipo`, `precio`) VALUES (%d, %d, '%s', '%s', %d)", $idSubasta, $idUsuario, $nombreItem, $item->getRareza(), $precio);
         $conn->query($insert);
         
-        Item_subastas::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
+        Item_subastas::borraPorItemYUsuario($nombreItem, $idUsuario);
+        Item::borrarDeInventario($nombreItem, $idUsuario, $item->getRareza());
     }
 
     public static function comprarItem($item, $id_usuario_comprador)

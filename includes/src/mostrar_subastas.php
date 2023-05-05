@@ -26,16 +26,16 @@ function listarItems($idUsuario)
         $items .= <<<EOS
         <div class="item">
 
+            <div class="foto_item">
+                <img src='./css/img/img_items/{$item->getNombre()}.png' alt='{$item->getNombre()}'/>
+            </div>
+
             <div class="nombre_item">
                 {$item->getNombre()}
             </div>
             
             <div class="rareza">
                 {$item->getRareza()}
-            </div>
-
-            <div class="precio_item">
-                {$precio} 
             </div>
 
             <div class="subastar_item">
@@ -45,6 +45,20 @@ function listarItems($idUsuario)
         </div>
         EOS;
     }
+
+    $html = <<<EOS
+    <div class="guia">
+        <div class = "div-opacidad">Imagen</div>
+        <div class = "div-opacidad">Item</div>
+        <div class = "div-opacidad">Rareza</div>
+        <div class = "div-opacidad">Subastar</div>
+    </div>
+    <div class="lista_items">
+        {$items}
+    </div>
+    EOS;
+
+    return $html;
 }
 
 function listarSubastas()

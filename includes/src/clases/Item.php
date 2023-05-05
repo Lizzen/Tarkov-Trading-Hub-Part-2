@@ -30,6 +30,7 @@ class Item {
                         $conn->real_escape_string($idUsuario),
                         $conn->real_escape_string($item['nombre']));
         $result = $conn->query($sql);
+        
         if($result){
           echo "Item actualizado correctamente en la base de datos";
         }else{
@@ -57,6 +58,43 @@ class Item {
         }
         return true;
     }
+    
+    public static function borrarDeInventario($nombreItem, $idUsuario, $rareza){
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $idInv = sprintf("SELECT id_inv FROM inventario_usuario WHERE id_usuario = '%d' AND nombre_item = '%s' AND rareza = '%s'", 
+                 $conn->real_escape_string($idUsuario),
+                 $conn->real_escape_string($nombreItem),
+                 $conn->real_escape_string($rareza)
+        );
+        $query = sprintf(
+            "DELETE FROM inventario_usuario WHERE id_usuario = '%d' AND id_inv = '%d'",
+            $conn->real_escape_string($idUsuario),
+            $conn->real_escape_string($idInv)
+        );
+        if (!$conn->query($query)) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            return false;
+        }
+        return true;
+    }
+
+    public static function buscaIdItem($item, $rareza)
+    {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        
+        $rs = $conn->query($query);
+        $result = false;
+        if ($rs) {
+            $fila = $rs->fetch_assoc();
+            if ($fila) {
+                $result = new Item($fila['nombre'], $fila['rareza'], $fila['tamaño_inventario'], $fila['filas'], $fila['columnas'], $fila['pos_x'], $fila['pos_y']);
+            }
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+    }
 
     public static function buscaItem($nombreItem)
     {
@@ -76,6 +114,7 @@ class Item {
         return $result;
     }
 
+    private $id_inventario;
     private $nombre;
     private $rareza;
     private $tamaño_inventario;
@@ -91,6 +130,9 @@ class Item {
         $this->columnas = $columnas;
         $this->pos_x = $pos_x;
         $this->pos_y = $pos_y;
+    }
+    public function getIdInv(){
+        return $this->id_inventario;
     }
     public function getNombre() {
         return $this->nombre;

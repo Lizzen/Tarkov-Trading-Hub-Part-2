@@ -1,12 +1,15 @@
 body {
   background: #0c0c12;
   color: #9a8865;
-  font-family: bender,Source Sans Pro,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+  font-family: bender, Source Sans Pro, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
   font-weight: 700;
 }
 .contenido {
   height: auto;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 main {
@@ -15,4 +18,98 @@ main {
 
 footer {
   margin-left: 6%;
+}
+
+.foto_item img {
+  width: 12vh;
+}
+
+.guia {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  padding: 1em;
+  font-weight: bold;
+  opacity: 80%;
+  margin-right: 7.7%;
+  
+}
+
+.guia div {
+  background-color: #474747;
+  text-align: center;
+  padding: 2% 2%;
+}
+
+.guia > div {
+  width: 25%;
+  margin-right: 0.5%;
+}
+
+.div-opacidad:hover {
+  opacity: 0.8;
+}
+
+.item {
+  display: flex;
+  align-items: stretch;
+  margin-left: 0.65%;
+  margin-right: 0%;
+}
+
+.item .foto_item,
+.item .nombre_item,
+.item .rareza,
+.item .subastar_item {
+  width: 20%;
+  height: 8em;
+  min-height: 8em;
+  max-height: 8em;
+  min-width: 20%;
+  max-width: 20%;
+  margin: 0.3%;
+  padding: 1em;
+  margin-left: 0.5%;
+  margin-right: 0%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: hsla(0, 0%, 100%, 0.05);
+}
+
+.item:hover .foto_item,
+.item:hover .nombre_item,
+.item:hover .nombre_usuario,
+.item:hover .precio_item {
+  background-color: hsla(0, 0%, 100%, 0.08);
+}
+
+.boton_comprar {
+  margin-left: 5%;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.btn_compra {
+  font-size: 1em;
+  background-color: #216130;
+  color: white;
+  padding: 1em 1em;
+  border-radius: 1em;
+  cursor: pointer;
+  float: right;
+  text-align: right;
+  margin-right: 50%;
+
+}
+
+.precio-intercambio {
+  display: flex;
+  align-items: center;
+  word-spacing: 0%;
+}
+.precio-intercambio img {
+  margin-left: 0%;
+  width: 6em;
+  height: 6em;
 }

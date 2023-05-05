@@ -5,6 +5,7 @@ namespace es\ucm\fdi\aw\clases\usuarios;
 use es\ucm\fdi\aw\Aplicacion;
 use es\ucm\fdi\aw\Formulario;
 use es\ucm\fdi\aw\clases\Item;
+use es\ucm\fdi\aw\clases\Item_subastas;
 
 class FormularioSubastas extends Formulario
 {
@@ -36,21 +37,19 @@ class FormularioSubastas extends Formulario
         $precioSubasta = htmlspecialchars(trim(strip_tags($datos['precioSubasta']))) ?? '';
 
         if (!filter_var($precioSubasta, FILTER_VALIDATE_FLOAT)) {
-            $this->setError('precioSubasta', 'El precio debe ser un número válido.');
+            alert('El precio debe ser un número válido.');
             return false;
         }
 
         $precioSubasta = floatval($precioSubasta);
 
         if ($precioSubasta < 1 || $precioSubasta > 9999) {
-            $this->setError('precioSubasta', 'El precio debe estar entre 1 y 9999.');
+            alert('El precio debe estar entre 1 y 9999.');
             return false;
         }
 
-        $this->item->setPrecioSubasta($precioSubasta);
-
         if (isset($datos['subastar'])) {
-            Item::subastarItem($this->item);
+            Item_subastas::subastarItem($this->item, $this->id_usuario_subasta, $precioSubasta);
         }
     }
 }
