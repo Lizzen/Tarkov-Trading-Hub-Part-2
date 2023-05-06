@@ -1,8 +1,6 @@
 <?php 
-
 namespace es\ucm\fdi\aw\clases;
 use es\ucm\fdi\aw\Aplicacion;
-
 class Item {
     public static function listarInventario($idUsuario) {
         $conn = Aplicacion::getInstance()->getConexionBd();
@@ -14,12 +12,11 @@ class Item {
         $result = $conn->query($sql);
         if($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
-                $inventario[] = new Item($row['id'], $row['nombre'], $row['rareza'],$row['altura'], $row['anchura'],$row['tamanyo'],$row['pos_x'], $row['pos_y'], $row['precioMin']);
+                $inventario[] = new Item($row['nombre'], $row['rareza'],$row['tamaño_inventario'], $row['filas'],$row['columnas'],$row['pos_x'],$row['pos_y']);
             }
         }
         return $inventario;
     }
-
     public static function actualizarItemInventario($idUsuario, $item) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $sql = sprintf("UPDATE inventario_usuario 
@@ -37,21 +34,21 @@ class Item {
           echo "Error al actualizar el item en la base de datos";
         }
     }
-
     public static function aniadirAInventario($item, $idUsuario)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $nombreItem = $item->getNombreItem();
+        $nombreItem = $item->getNombre();
         do {
             $idInv = rand(1, 1000); // Generamos un id aleatorio para el item
+            $comprobacion = sprintf("SELECT id_inv FROM inventario_usuario WHERE id_usuario = %d AND id_inv = %d", $idUsuario, $idInv);
             $comprobacion = sprintf("SELECT id_inv FROM inventario_usuario WHERE id_usuario = %d AND id_inv = %d", 
                                 $conn->real_escape_string($idUsuario), 
                                 $conn->real_escape_string($idInv)
                             );
             $result = $conn->query($comprobacion);
         } while ($result->num_rows > 0); // Si el id ya existe en la tabla, lo volvemos a intentar
-        
-        $insert = sprintf("INSERT INTO `inventario_usuario` (`id_usuario`, `id_inv`, `nombre_item`) VALUES (%d, %d, '%s')", 
+
+        $insert = sprintf("INSERT INTO `inventario_usuario` (`id_usuario`, `id_inv`, `nombre_item`) VALUES (%d, %d, '%s')",
                     $conn->real_escape_string($idUsuario), 
                     $conn->real_escape_string($idInv), 
                     $conn->real_escape_string($nombreItem)
@@ -81,7 +78,6 @@ class Item {
         }
         return true;
     }
-
     public static function buscaIdItem($item, $rareza)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
@@ -91,7 +87,7 @@ class Item {
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Item($fila['id'], $fila['nombre'], $fila['rareza'], $fila['altura'], $fila['anchura'], $fila['tamanyo'],$fila['pos_x'], $fila['pos_y'], $fila['precioMin']);
+                $result = new Item($fila['nombre'], $fila['rareza'], $fila['tamaño_inventario'], $fila['filas'], $fila['columnas'], $fila['pos_x'], $fila['pos_y']);
             }
             $rs->free();
         } else {
@@ -99,7 +95,6 @@ class Item {
         }
         return $result;
     }
-
     public static function buscaItem($nombreItem)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
@@ -109,7 +104,7 @@ class Item {
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Item($fila['id'], $fila['nombre'], $fila['rareza'], $fila['altura'], $fila['anchura'], $fila['tamanyo'],$fila['pos_x'], $fila['pos_y'], $fila['precioMin']);
+                $result = new Item($fila['nombre'], $fila['rareza'], $fila['tamaño_inventario'], $fila['filas'], $fila['columnas'], $fila['pos_x'], $fila['pos_y']);
             }
             $rs->free();
         } else {
@@ -118,32 +113,25 @@ class Item {
         return $result;
     }
 
-    private $id;
+    private $id_inventario;
     private $nombre;
     private $rareza;
-    private $altura;
-    private $anchura;
-    private $tamanyo;
+    private $tamaño_inventario;
+    private $filas;
+    private $columnas;
     private $pos_x;
     private $pos_y;
-    private $precioMin;
-
-    private function __construct($id, $nombre, $rareza, $altura, $anchura, $tamanyo, $pos_x,$pos_y, $precioMin) {
-        $this->id = $id;
+    private function __construct($nombre, $rareza,$tamaño_inventario, $filas, $columnas,$pos_x,$pos_y) {
         $this->nombre = $nombre;
         $this->rareza = $rareza;
-        $this->altura = $altura;
-        $this->anchura = $anchura;
-        $this->tamanyo = $tamanyo;
+        $this->tamaño_inventario = $tamaño_inventario;
+        $this->filas = $filas;
+        $this->columnas = $columnas;
         $this->pos_x = $pos_x;
         $this->pos_y = $pos_y;
-        $this->precioMin = $precioMin;
     }
     public function getIdInv(){
         return $this->id_inventario;
-    }
-    public function getId() {
-        return $this->id;
     }
     public function getNombre() {
         return $this->nombre;
@@ -151,27 +139,19 @@ class Item {
     public function getRareza() {
         return $this->rareza;
     }
-    
-    public function getAltura() {
-        return $this->altura
-;
+    public function getTamaño_inventario() {
+        return $this->tamaño_inventario;
     }
-    public function getAnchura() {
-        return $this->anchura;
+    public function getFilas() {
+        return $this->filas;
     }
-    public function gettamanyo() {
-        return $this->tamanyo;
+    public function getColumnas() {
+        return $this->columnas;
     }
-
     public function getX() {
         return $this->pos_x;
     }
-
     public function getY() {
         return $this->pos_y;
-    }
-    
-    public function getPrecioMin() {
-        return $this->precioMin;
     }
 }
