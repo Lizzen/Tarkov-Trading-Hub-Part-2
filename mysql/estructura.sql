@@ -50,20 +50,24 @@ INSERT INTO `inventario_usuario` (`id_usuario`, `id_inv`, `nombre_item`, `pos_x`
 --
 
 CREATE TABLE `items` (
+  `id` varchar(255) PRIMARY KEY,
   `nombre` varchar(255) NOT NULL,
   `rareza` varchar(255) NOT NULL,
-  `tamaño_inventario` varchar(255) NOT NULL,
-  `filas` int(10) NOT NULL,
-  `columnas` int(10) NOT NULL
+  `altura` int(10) NOT NULL,
+  `anchura` int(10) NOT NULL,
+  `tamanyo` varchar(255) NOT NULL,
+  --`imagen` image NOT NULL,
+  `precioMin` int(10) DEFAULT VALUES 1
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `items`
 --
 
-INSERT INTO `items` (`nombre`, `rareza`, `tamaño_inventario`, `filas`, `columnas`) VALUES
-('casco', 'comun', '2x2', 2, 2),
-('plate_carrier', 'raro', '3x3', 3, 3);
+INSERT INTO `items` (`id`,`nombre`, `rareza`, `altura`, `anchura`, `tamanyo`, `precioMin`) VALUES
+('0','casco', 'comun', 2, 2, '2x2', 5),
+('1','plate_carrier', 'raro', 3, 3, '3x3', 10);
 
 -- --------------------------------------------------------
 

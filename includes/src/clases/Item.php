@@ -14,7 +14,7 @@ class Item {
         $result = $conn->query($sql);
         if($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
-                $inventario[] = new Item($row['nombre'], $row['rareza'],$row['tamaño_inventario'], $row['filas'],$row['columnas'],$row['pos_x'],$row['pos_y']);
+                $inventario[] = new Item($row['id'], $row['nombre'], $row['rareza'],$row['altura'], $row['anchura'],$row['tamanyo'],$row['pos_x'], $row['pos_y'], $row['precioMin']);
             }
         }
         return $inventario;
@@ -91,7 +91,7 @@ class Item {
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Item($fila['nombre'], $fila['rareza'], $fila['tamaño_inventario'], $fila['filas'], $fila['columnas'], $fila['pos_x'], $fila['pos_y']);
+                $result = new Item($fila['id'], $fila['nombre'], $fila['rareza'], $fila['altura'], $fila['anchura'], $fila['tamanyo'],$fila['pos_x'], $fila['pos_y'], $fila['precioMin']);
             }
             $rs->free();
         } else {
@@ -109,7 +109,7 @@ class Item {
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Item($fila['nombre'], $fila['rareza'], $fila['tamaño_inventario'], $fila['filas'], $fila['columnas'], $fila['pos_x'], $fila['pos_y']);
+                $result = new Item($fila['id'], $fila['nombre'], $fila['rareza'], $fila['altura'], $fila['anchura'], $fila['tamanyo'],$fila['pos_x'], $fila['pos_y'], $fila['precioMin']);
             }
             $rs->free();
         } else {
@@ -118,24 +118,32 @@ class Item {
         return $result;
     }
 
+    private $id;
     private $nombre;
     private $rareza;
-    private $tamaño_inventario;
-    private $filas;
-    private $columnas;
+    private $altura;
+    private $anchura;
+    private $tamanyo;
     private $pos_x;
     private $pos_y;
-    private function __construct($nombre, $rareza,$tamaño_inventario, $filas, $columnas,$pos_x,$pos_y) {
+    private $precioMin;
+
+    private function __construct($id, $nombre, $rareza, $altura, $anchura, $tamanyo, $pos_x,$pos_y, $precioMin) {
+        $this->id = $id;
         $this->nombre = $nombre;
         $this->rareza = $rareza;
-        $this->tamaño_inventario = $tamaño_inventario;
-        $this->filas = $filas;
-        $this->columnas = $columnas;
+        $this->altura = $altura;
+        $this->anchura = $anchura;
+        $this->tamanyo = $tamanyo;
         $this->pos_x = $pos_x;
         $this->pos_y = $pos_y;
+        $this->precioMin = $precioMin;
     }
     public function getIdInv(){
         return $this->id_inventario;
+    }
+    public function getId() {
+        return $this->id;
     }
     public function getNombre() {
         return $this->nombre;
@@ -143,14 +151,16 @@ class Item {
     public function getRareza() {
         return $this->rareza;
     }
-    public function getTamaño_inventario() {
-        return $this->tamaño_inventario;
+    
+    public function getAltura() {
+        return $this->altura
+;
     }
-    public function getFilas() {
-        return $this->filas;
+    public function getAnchura() {
+        return $this->anchura;
     }
-    public function getColumnas() {
-        return $this->columnas;
+    public function gettamanyo() {
+        return $this->tamanyo;
     }
 
     public function getX() {
@@ -159,5 +169,9 @@ class Item {
 
     public function getY() {
         return $this->pos_y;
+    }
+    
+    public function getPrecioMin() {
+        return $this->precioMin;
     }
 }
