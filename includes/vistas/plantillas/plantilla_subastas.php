@@ -20,7 +20,14 @@ require_once './includes/src/mostrar_subastas.php';
 	<main>
 		<div class="contenido">
 			<?= $params['contenidoPrincipal'] ?>
-			<?= muestra_subastas() ?>
+			<?php 
+				$id = $params['id'];
+				if ($id == 'inicio') {muestra_inicio();}
+				else if ($id == 'subastar') { muestra_inventario();} 
+				else if ($id == 'mis_subastas') { muestra_mis_subastas();}
+				else if ($id == 'pujar') {muestra_pujas();}
+				else {muestra_mis_pujas();}
+			 ?>
 		</div>
 	</main>
 	<?php require('includes/vistas/comun/pie.php'); ?>

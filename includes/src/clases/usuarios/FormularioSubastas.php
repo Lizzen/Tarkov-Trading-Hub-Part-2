@@ -16,7 +16,7 @@ class FormularioSubastas extends Formulario
     {
         parent::__construct('formSubastas', [
             'method' => 'POST',
-            'urlRedireccion' => Aplicacion::getInstance()->resuelve('./subastas.php'),
+            'urlRedireccion' => Aplicacion::getInstance()->resuelve('./subastas.php?id=subastar'),
         ]);
         $this->item = $item;
         $this->id_usuario_subasta = $id_usuario_subasta;
@@ -33,22 +33,22 @@ class FormularioSubastas extends Formulario
     }
 
     protected function procesaFormulario(&$datos)
-    {
-        $precioSubasta = htmlspecialchars(trim(strip_tags($datos['precioSubasta']))) ?? '';
+    {   
+        if (isset($datos['subastar'])){
+            $precioSubasta = htmlspecialchars(trim(strip_tags($datos['precioSubasta']))) ?? '';
 
-        if (!filter_var($precioSubasta, FILTER_VALIDATE_FLOAT)) {
-            alert('El precio debe ser un número válido.');
-            return false;
-        }
+            if (!filter_var($precioSubasta, FILTER_VALIDATE_FLOAT)) {
+                alert('El precio debe ser un número válido.');
+                return false;
+            }
 
-        $precioSubasta = floatval($precioSubasta);
+            $precioSubasta = floatval($precioSubasta);
 
-        if ($precioSubasta < 1 || $precioSubasta > 9999) {
-            alert('El precio debe estar entre 1 y 9999.');
-            return false;
-        }
+            if ($precioSubasta < 1 || $precioSubasta > 9999) {
+                alert('El precio debe estar entre 1 y 9999.');
+                return false;
+            }
 
-        if (isset($datos['subastar'])) {
             Item_subastas::subastarItem($this->item, $this->id_usuario_subasta, $precioSubasta);
         }
     }

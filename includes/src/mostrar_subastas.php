@@ -4,9 +4,32 @@ use es\ucm\fdi\aw\clases\Item_subastas;
 use es\ucm\fdi\aw\clases\Item;
 use es\ucm\fdi\aw\clases\usuarios\Usuario;
 
-function muestra_subastas()
+function muestra_inicio()
+{
+
+}
+
+function muestra_inventario()
 {
     $html = listarItems($_SESSION['idUsuario']);
+    echo $html;
+}
+
+function muestra_mis_subastas()
+{
+    $html = misSubastas($_SESSION['idUsuario']);
+    echo $html;
+}
+
+function muestra_pujas()
+{
+    $html = listarSubastas($_SESSION['idUsuario']);
+    echo $html;
+}
+
+function muestra_mis_pujas()
+{
+    $html = misPujas($_SESSION['idUsuario']);
     echo $html;
 }
 
@@ -61,9 +84,59 @@ function listarItems($idUsuario)
     return $html;
 }
 
-function listarSubastas()
+function misSubastas($idUsuario)
 {
-    $listaItems = Item_subastas::itemsSubastas($_SESSION['idUsuario']);
+    $listaItems = Item_subastas::itemsUsuario($idUsuario);
+    if (empty($listaItems)) {
+        return '<p>No tienes items en subasta</p>';
+    }
+
+    $items = '';
+    foreach ($listaItems as $subasta) {
+
+        $formularioSubastas = new FormularioSubastas($subasta, $idUsuario);        
+
+        $items .= <<<EOS
+        <div class="item">
+
+            <div class="foto_item">
+                <img src='./css/img/img_items/{$subasta->getNombre()}.png' alt='{$subasta->getNombre()}'/>
+            </div>
+
+            <div class="nombre_item">
+                {$subasta->getNombre()}
+            </div>
+            
+            <div class="rareza">
+                {$subasta->getRareza()}
+            </div>
+
+            <div class="precio">
+                {$subasta->getPrecio()} 
+            </div>
+
+        </div>
+        EOS;
+    }
+
+    $html = <<<EOS
+    <div class="guia">
+        <div class = "div-opacidad">Imagen</div>
+        <div class = "div-opacidad">Item</div>
+        <div class = "div-opacidad">Rareza</div>
+        <div class = "div-opacidad">Precio</div>
+    </div>
+    <div class="lista_items">
+        {$items}
+    </div>
+    EOS;
+
+    return $html;
+}
+
+function listarSubastas($idUsuario)
+{
+    $listaItems = Item_subastas::itemsSubastas($idUsuario);
     if (empty($listaItems)) {
         return '<p>No hay items en subasta</p>';
     }
@@ -73,7 +146,7 @@ function listarSubastas()
         $precio = $subasta->getPrecio();
         $tipo = $subasta->getTipo();
 
-        $formularioSubastas = new FormularioSubastas($subasta, $_SESSION['idUsuario']);
+        $formularioSubastas = new FormularioSubastas($subasta, $idUsuario);
         $botonPuja = $formularioSubastas->gestiona();        
 
         $items .= <<<EOS
@@ -92,7 +165,7 @@ function listarSubastas()
             </div>
 
             <div class="precio_item">
-                {$precio} 
+                {$subasta->getPrecio()} 
             </div>
 
             <div class="pujar_item">
@@ -105,9 +178,9 @@ function listarSubastas()
 
     $html = <<<EOS
     <div class="guia">
-        <div>Foto</div>
-        <div class = "div-opacidad">Nombre item</div>
-        <div class = "div-opacidad">Nombre usuario</div>
+        <div class = "div-opacidad">Imagen</div>
+        <div class = "div-opacidad">item</div>
+        <div class = "div-opacidad">usuario</div>
         <div class = "div-opacidad">Precio</div>
         <div class = "div-opacidad">Pujar</div>
     </div>
@@ -117,5 +190,13 @@ function listarSubastas()
     EOS;
 
     return $html;
+}
+
+function misPujas($idUsuario)
+{
+    $listaItems = Item_subastas::itemsUsuario($idUsuario);
+    if (empty($listaItems)) {
+        return '<p>No tienes ninguna puja activa</p>';
+    }
 }
 ?>

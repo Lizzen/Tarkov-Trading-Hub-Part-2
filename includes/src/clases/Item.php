@@ -44,14 +44,18 @@ class Item {
         $nombreItem = $item->getNombreItem();
         do {
             $idInv = rand(1, 1000); // Generamos un id aleatorio para el item
-            $comprobacion = sprintf("SELECT id_inv FROM inventario_usuario WHERE id_usuario = %d AND id_inv = %d", $idUsuario, $idInv);
+            $comprobacion = sprintf("SELECT id_inv FROM inventario_usuario WHERE id_usuario = %d AND id_inv = %d", 
+                                $conn->real_escape_string($idUsuario), 
+                                $conn->real_escape_string($idInv)
+                            );
             $result = $conn->query($comprobacion);
         } while ($result->num_rows > 0); // Si el id ya existe en la tabla, lo volvemos a intentar
-
-        /*if (!Item_mercado::comprobarPosicionDisponible($item, $idUsuario, $conn)) {
-            return false;
-        }*/
-        $insert = sprintf("INSERT INTO `inventario_usuario` (`id_usuario`, `id_inv`, `nombre_item`) VALUES (%d, %d, '%s')", $idUsuario, $idInv, $nombreItem);
+        
+        $insert = sprintf("INSERT INTO `inventario_usuario` (`id_usuario`, `id_inv`, `nombre_item`) VALUES (%d, %d, '%s')", 
+                    $conn->real_escape_string($idUsuario), 
+                    $conn->real_escape_string($idInv), 
+                    $conn->real_escape_string($nombreItem)
+                );
         if (!$conn->query($insert)) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
             return false;
@@ -114,7 +118,6 @@ class Item {
         return $result;
     }
 
-    private $id_inventario;
     private $nombre;
     private $rareza;
     private $tamaño_inventario;
