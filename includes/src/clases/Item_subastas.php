@@ -10,6 +10,7 @@ class Item_subastas
 {
     public static function itemsSubastas($id_usuario)
     {
+        Item_subastas::actualizarTiempoRestante();
         $conn = Aplicacion::getInstance()->getConexionBd();
         $listaSubastas = [];
         $sql = "SELECT * FROM subastas WHERE id_usuario != $id_usuario AND id_licitador != $id_usuario";
@@ -25,6 +26,7 @@ class Item_subastas
 
     public static function itemsPujas($licitador)
     {
+        Item_subastas::actualizarTiempoRestante();
         $conn = Aplicacion::getInstance()->getConexionBd();
         $listaPujas = [];
         $sql = "SELECT * FROM subastas WHERE id_licitador = $licitador";
@@ -71,16 +73,16 @@ class Item_subastas
             $intervalo = $tiempo_actual->diff($tiempo_limite);
             
             if ($tiempo_actual >= $tiempo_limite){
-                terminarSubasta($id_subasta);
+                Item_subastas::terminarSubasta($id_subasta);
             }
             else{
                 $dias = $intervalo->d;
                 $horas = $intervalo->h;
                 $minutos = $intervalo->i;
                 $tiempo_restante = sprintf("%d:%d:%d", $dias, $horas, $minutos);
+                $update = sprintf("UPDATE subastas SET tiempo_restante = '%s' WHERE id_subasta = %d", $tiempo_restante, $id_subasta);
+                $conn->query($update);
             }
-            $update = sprintf("UPDATE subastas SET tiempo_restante = '%s' WHERE id_subasta = %d", $tiempo_restante, $id_subasta);
-            $conn->query($update);
         }
         $result->free();
     
@@ -130,29 +132,30 @@ class Item_subastas
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $itemSubasta = "SELECT * FROM subastas WHERE id_subasta = $id_subasta";
-        $conn->query($itemSubasta);
+        $result = $conn->query($itemSubasta);
+        $row = $result->fetch_assoc();
         $item = new Item_subastas($row['id_subasta'], $row['id_usuario'], $row['nombre_item'], $row['tipo'], $row['precio'], $row['id_licitador'], $row['fecha_limite'], $row['tiempo_restante']);
-
-        if ($item['id_licitador'] != NULL){
-            Item::aniadirAInventario($item, $item['id_licitador']);
-            Usuario::sumaDinero($item['precio'], $item['id_usuario']);
-            Usuario::restaDinero($item['precio'], $item['id_licitador']);
+    
+        if ($item->getLicitador() != 0){
+            Item::aniadirAInventario($item, $item->getLicitador());
+            Usuario::sumaDinero($item->getPrecio(), $item->getId_usuario());
+            Usuario::restaDinero($item->getPrecio(), $item->getLicitador());
         }
         else{
-            Item::aniadirAInventario($item, $item['id_usuario']);
+            Item::aniadirAInventario($item, $item->getId_usuario());
         }
-
+    
         $query = sprintf(
             "DELETE FROM subastas WHERE id_subasta = '%d'",
             $conn->real_escape_string($id_subasta)
         );
         if (!$conn->query($query)) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
-            return false;
+            throw new Exception("Error al eliminar subasta");
         }
         return true;
     }
-
+    
     private $id_subasta;
     private $nombre_item;
     private $id_usuario;
