@@ -21,7 +21,7 @@ $contenidoPrincipal = <<<EOS
       <section>
         <img src = "./css/img/Inventario.png" alt="inventario" onclick="window.location.href='inventario.php'" />
         <img src = "./css/img/Mercado.png" alt="mercado" onclick="window.location.href='mercado.php'" />
-        <img src = "./css/img/Subasta.png" alt="subastas" onclick="window.location.href='subastas.php'" />
+        <img src = "./css/img/Subasta.png" alt="subastas" onclick="window.location.href='subastas.php?id=inicio'" />
         <img src = "./css/img/Comunidad.png" alt="comunidad" onclick="window.location.href='comunidad.php'" />
       </section>
       
