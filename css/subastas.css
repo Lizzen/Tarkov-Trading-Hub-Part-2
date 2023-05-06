@@ -59,14 +59,16 @@ footer {
 
 .item .foto_item,
 .item .nombre_item,
+.item .nombre_usuario,
 .item .rareza,
-.item .precio,
+.item .precio_item,
+.item .pujar_item,
 .item .subastar_item {
   width: 20%;
   height: 8em;
   min-height: 8em;
   max-height: 8em;
-  min-width: 20%;
+  min-width: 15%;
   max-width: 20%;
   margin: 0.3%;
   padding: 1em;

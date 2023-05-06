@@ -1,5 +1,6 @@
 <?php
 use es\ucm\fdi\aw\clases\usuarios\FormularioSubastas;
+use es\ucm\fdi\aw\clases\usuarios\FormularioPujas;
 use es\ucm\fdi\aw\clases\Item_subastas;
 use es\ucm\fdi\aw\clases\Item;
 use es\ucm\fdi\aw\clases\usuarios\Usuario;
@@ -111,7 +112,7 @@ function misSubastas($idUsuario)
                 {$subasta->getRareza()}
             </div>
 
-            <div class="precio">
+            <div class="precio_item">
                 {$subasta->getPrecio()} 
             </div>
 
@@ -143,21 +144,18 @@ function listarSubastas($idUsuario)
 
     $items = '';
     foreach ($listaItems as $subasta) {
-        $precio = $subasta->getPrecio();
-        $tipo = $subasta->getTipo();
-
-        $formularioSubastas = new FormularioSubastas($subasta, $idUsuario);
-        $botonPuja = $formularioSubastas->gestiona();        
+        $formularioPujas = new FormularioPujas($subasta, $idUsuario);
+        $botonPuja = $formularioPujas->gestiona();        
 
         $items .= <<<EOS
         <div class="item">
 
             <div class="foto_item">
-                <img src='./css/img/img_items/{$subasta->getNombreItem()}.png' alt='{$subasta->getNombreItem()}'/>
+                <img src='./css/img/img_items/{$subasta->getNombre()}.png' alt='{$subasta->getNombre()}'/>
             </div>
 
             <div class="nombre_item">
-                {$subasta->getNombreItem()}
+                {$subasta->getNombre()}
             </div>
             
             <div class="nombre_usuario">
@@ -194,9 +192,49 @@ function listarSubastas($idUsuario)
 
 function misPujas($idUsuario)
 {
-    $listaItems = Item_subastas::itemsUsuario($idUsuario);
+    $listaItems = Item_subastas::itemsPujas($idUsuario);
     if (empty($listaItems)) {
         return '<p>No tienes ninguna puja activa</p>';
     }
+
+    $items = '';
+    foreach ($listaItems as $subasta) {   
+
+        $items .= <<<EOS
+        <div class="item">
+
+            <div class="foto_item">
+                <img src='./css/img/img_items/{$subasta->getNombre()}.png' alt='{$subasta->getNombre()}'/>
+            </div>
+
+            <div class="nombre_item">
+                {$subasta->getNombre()}
+            </div>
+            
+            <div class="nombre_usuario">
+                {$subasta->getNombreUsuario($subasta->getId_usuario())}
+            </div>
+
+            <div class="precio_item">
+                {$subasta->getPrecio()} 
+            </div>
+
+        </div>
+        EOS;
+    }
+    
+        $html = <<<EOS
+        <div class="guia">
+            <div class = "div-opacidad">Imagen</div>
+            <div class = "div-opacidad">item</div>
+            <div class = "div-opacidad">usuario</div>
+            <div class = "div-opacidad">Precio</div>
+        </div>
+        <div class="lista_items">
+            {$items}
+        </div>
+        EOS;
+    
+        return $html;
 }
 ?>

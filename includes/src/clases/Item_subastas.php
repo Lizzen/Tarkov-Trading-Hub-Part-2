@@ -12,15 +12,30 @@ class Item_subastas
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $listaSubastas = [];
-        $sql = "SELECT * FROM subastas WHERE id_usuario != $id_usuario";
+        $sql = "SELECT * FROM subastas WHERE id_usuario != $id_usuario AND id_licitador != $id_usuario";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $listaSubastas[] = new Item_subastas($row['id_subasta'], $row['id_usuario'], $row['nombre_item'], $row['tipo'], $row['precio']);
+                $listaSubastas[] = new Item_subastas($row['id_subasta'], $row['id_usuario'], $row['nombre_item'], $row['tipo'], $row['precio'], $row['id_licitador']);
             }
         }
         $result->free();
         return $listaSubastas;
+    }
+
+    public static function itemsPujas($licitador)
+    {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $listaPujas = [];
+        $sql = "SELECT * FROM subastas WHERE id_licitador = $licitador";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $listaPujas[] = new Item_subastas($row['id_subasta'], $row['id_usuario'], $row['nombre_item'], $row['tipo'], $row['precio'], $row['id_licitador']);
+            }
+        }
+        $result->free();
+        return $listaPujas;
     }
 
     public static function itemsUsuario($id_usuario)
@@ -31,14 +46,15 @@ class Item_subastas
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $listaSubastas[] = new Item_subastas($row['id_subasta'], $row['id_usuario'], $row['nombre_item'], $row['tipo'], $row['precio']);
+                $listaSubastas[] = new Item_subastas($row['id_subasta'], $row['id_usuario'], $row['nombre_item'], $row['tipo'], $row['precio'], $row['id_licitador']);
             }
         }
         $result->free();
         return $listaSubastas;
     }
 
-    public static function subastarItem($item, $idUsuario, $precio){
+    public static function subastarItem($item, $idUsuario, $precio)
+    {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $nombreItem = $item->getNombre();
 
@@ -48,8 +64,8 @@ class Item_subastas
             $result = $conn->query($comprobacion);
         } while ($result->num_rows > 0); 
         $result->free();
-
-        $insert = sprintf("INSERT INTO `subastas` (`id_subasta`, `id_usuario`, `nombre_item`, `tipo`, `precio`) VALUES (%d, %d, '%s', '%s', %d)", $idSubasta, $idUsuario, $nombreItem, $item->getRareza(), $precio);
+        
+        $insert = sprintf("INSERT INTO `subastas` (`id_subasta`, `id_usuario`, `nombre_item`, `tipo`, `precio`, `id_licitador`) VALUES (%d, %d, '%s', '%s', %f, %d)", $idSubasta, $idUsuario, $nombreItem, $item->getRareza(), $precio, NULL);
         
         Item::borrarDeInventario($nombreItem, $idUsuario, $item->getRareza());
         if (!$conn->query($insert)) {
@@ -57,6 +73,20 @@ class Item_subastas
             return false;
         }
         return true;
+    }
+
+    public static function pujarItem($id_subasta, $precio, $licitador)
+    {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = sprintf("UPDATE subastas SET precio = %f, id_licitador = %d WHERE id_subasta = %d", $precio, $licitador, $id_subasta);
+        $result = $conn->query($query);
+        if (!$result) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            return false;
+        }
+
+        return true;
+
     }
 
     public static function comprarItem($item, $id_usuario_comprador)
@@ -77,85 +107,20 @@ class Item_subastas
         }
     }
 
-
-    public static function borraPorItemYUsuario($nombre_item, $id_usuario)
-    {
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf(
-            "DELETE FROM subastas WHERE id_usuario = %d AND nombre_item = '%s'",
-            $id_usuario,
-            $nombre_item
-        );
-        if (!$conn->query($query)) {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-            return false;
-        }
-        return true;
-    }
-
-
-    public static function getItemPorNombre($nombreItem)
-    {
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $sql = "SELECT * FROM subastas WHERE nombre_item='$nombreItem'";
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $Item_subastas = new Item_subastas($row['id_subasta'], $row['id_usuario'], $row['nombre_item'], $row['tipo'], $row['precio'], $row['nombre_intercambio']);
-            return $item_mercado;
-        }
-        return null;
-    }
-
-
-    public static function comprobarPosicionDisponible($x, $y, $anchura, $altura, $idUsuario)
-    {
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $xIni = $x;
-        $xFin = $x + $anchura - 1;
-        $yIni = $y;
-        $yFin = $y + $altura - 1;
-
-        $query = sprintf(
-            "SELECT x, y, anchura, altura FROM inventario_usuario WHERE id_usuario = %d",
-            $idUsuario
-        );
-        $result = $conn->query($query);
-        if (!$result) {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-            return false;
-        }
-
-        while ($row = $result->fetch_assoc()) {
-            $itemXIni = $row["x"];
-            $itemXFin = $itemXIni + $row["anchura"] - 1;
-            $itemYIni = $row["y"];
-            $itemYFin = $itemYIni + $row["altura"] - 1;
-
-            if (($itemXIni >= $xIni && $itemXIni <= $xFin) || ($itemXFin >= $xIni && $itemXFin <= $xFin)) {
-                if (($itemYIni >= $yIni && $itemYIni <= $yFin) || ($itemYFin >= $yIni && $itemYFin <= $yFin)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-
-
     private $id_subasta;
     private $nombre_item;
     private $id_usuario;
     private $tipo;
     private $precio;
-    private function __construct($id_subasta, $id_usuario, $nombre_item, $tipo, $precio,)
+    private $licitador;
+    private function __construct($id_subasta, $id_usuario, $nombre_item, $tipo, $precio, $licitador)
     {
         $this->id_subasta = $id_subasta;
         $this->nombre_item = $nombre_item;
         $this->id_usuario = $id_usuario;
         $this->tipo = $tipo;
         $this->precio = $precio;
+        $this->licitador =$licitador;
     }
     public function getId()
     {
@@ -179,6 +144,11 @@ class Item_subastas
     public function getPrecio()
     {
         return $this->precio;
+    }
+
+    public function getLicitador()
+    {
+        return $this->licitador;
     }
 
     public function getNombreUsuario($id)

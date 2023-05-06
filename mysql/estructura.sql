@@ -76,7 +76,8 @@ CREATE TABLE `subastas` (
   `id_usuario` int(255) NOT NULL,
   `nombre_item` varchar(255) NOT NULL,
   `tipo` varchar(255) NOT NULL,
-  `precio` int(255) NOT NULL
+  `precio` float NOT NULL,
+  `id_licitador` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
