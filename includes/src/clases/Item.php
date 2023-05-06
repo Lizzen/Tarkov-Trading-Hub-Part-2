@@ -41,7 +41,6 @@ class Item {
         $nombreItem = $item->getNombre();
         do {
             $idInv = rand(1, 1000); // Generamos un id aleatorio para el item
-            $comprobacion = sprintf("SELECT id_inv FROM inventario_usuario WHERE id_usuario = %d AND id_inv = %d", $idUsuario, $idInv);
             $comprobacion = sprintf("SELECT id_inv FROM inventario_usuario WHERE id_usuario = %d AND id_inv = %d", 
                                 $conn->real_escape_string($idUsuario), 
                                 $conn->real_escape_string($idInv)
