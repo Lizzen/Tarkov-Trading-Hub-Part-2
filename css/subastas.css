@@ -60,6 +60,7 @@ footer {
 .item .foto_item,
 .item .nombre_item,
 .item .rareza,
+.item .precio,
 .item .subastar_item {
   width: 20%;
   height: 8em;
