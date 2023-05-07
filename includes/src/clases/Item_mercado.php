@@ -38,14 +38,14 @@ class Item_mercado
                 // Mandar dinero a vendedor
                 Usuario::sumaDinero($item->getPrecio(), $item->getId_usuario());
 
-                Item_mercado::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
+                Item_mercado::borraPorItemYUsuario($item->getNombre(), $item->getId_usuario());
                 break;
 
             case 'intercambio':
                 // Pasan item a tu inventario ¿comprobar si cabe item?
                 Item::aniadirAInventario($item, $id_usuario_comprador);
 
-                Item_mercado::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
+                Item_mercado::borraPorItemYUsuario($item->getNombre(), $item->getId_usuario());
                 break;
 
             case 'dual':
@@ -58,7 +58,7 @@ class Item_mercado
                 Item::aniadirAInventario($item, $item->getId_usuario());
 
                 // Eliminar item mercado
-                Item_mercado::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
+                Item_mercado::borraPorItemYUsuario($item->getNombre(), $item->getId_usuario());
                 break;
         }
     }
@@ -148,7 +148,7 @@ class Item_mercado
     {
         return $this->id_venta;
     }
-    public function getNombreItem()
+    public function getNombre()
     {
         return $this->nombre_item;
     }
