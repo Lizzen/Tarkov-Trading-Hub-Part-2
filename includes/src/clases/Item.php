@@ -8,7 +8,9 @@ class Item {
         $sql = sprintf("SELECT *
                         FROM inventario_usuario ui 
                         JOIN items i ON ui.nombre_item = i.nombre 
-                        WHERE ui.id_usuario='%s'", $conn->real_escape_string($idUsuario));
+                        WHERE ui.id_usuario='%s'", 
+                        $conn->real_escape_string($idUsuario)
+        );
         $result = $conn->query($sql);
         if($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
@@ -61,13 +63,26 @@ class Item {
 
     public static function borrarDeInventario($nombreItem, $idUsuario, $rareza){
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $idInv = sprintf("SELECT id_inv FROM inventario_usuario WHERE id_usuario = '%d' AND nombre_item = '%s' AND rareza = '%s'", 
-                 $conn->real_escape_string($idUsuario),
-                 $conn->real_escape_string($nombreItem),
-                 $conn->real_escape_string($rareza)
+        $idInvQuery = sprintf(
+            "SELECT iu.id_inv FROM inventario_usuario iu 
+            INNER JOIN items it 
+            ON it.nombre = iu.nombre_item 
+            WHERE iu.id_usuario = %d AND it.nombre = '%s' AND it.rareza = '%s'", 
+            $conn->real_escape_string($idUsuario),
+            $conn->real_escape_string($nombreItem),
+            $conn->real_escape_string($rareza)
         );
+        $result = $conn->query($idInvQuery);
+        if (!$result) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            return false;
+        }
+
+        $idInvRow = $result->fetch_assoc();
+        $idInv = $idInvRow['id_inv'];
+        $result->free();
         $query = sprintf(
-            "DELETE FROM inventario_usuario WHERE id_usuario = '%d' AND id_inv = '%d'",
+            "DELETE FROM inventario_usuario WHERE id_usuario = %d AND id_inv = %d",
             $conn->real_escape_string($idUsuario),
             $conn->real_escape_string($idInv)
         );
@@ -77,6 +92,7 @@ class Item {
         }
         return true;
     }
+
     public static function buscaIdItem($item, $rareza)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
