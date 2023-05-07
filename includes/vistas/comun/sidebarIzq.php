@@ -38,7 +38,7 @@ $app = Aplicacion::getInstance();
 
 		<div class="elem-caja">
 			<div class="elem-imagen">
-				<img src="./css/img/subasta_dorado.png" alt="subastas" class="icon-small" onclick="window.location.href='subastas.php'">
+				<img src="./css/img/subasta_dorado.png" alt="subastas" class="icon-small" onclick="window.location.href='subastas.php?id=inicio'">
 			</div>
 			<div class="elem-details">
 				<details>
