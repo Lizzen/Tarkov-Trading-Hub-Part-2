@@ -69,8 +69,8 @@ class Item_mercado
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf(
             "DELETE FROM ventas_mercado WHERE id_usuario = %d AND nombre_item = '%s'",
-            $id_usuario,
-            $nombre_item
+            $conn->real_escape_string($id_usuario),
+            $conn->real_escape_string($nombre_item)
         );
         if (!$conn->query($query)) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
@@ -102,8 +102,7 @@ class Item_mercado
         $yFin = $y + $altura - 1;
 
         $query = sprintf(
-            "SELECT x, y, anchura, altura FROM inventario_usuario WHERE id_usuario = %d",
-            $idUsuario
+            "SELECT x, y, anchura, altura FROM inventario_usuario WHERE id_usuario = $idUsuario",
         );
         $result = $conn->query($query);
         if (!$result) {
