@@ -12,7 +12,10 @@ class Item_mercado
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $listaVentas = [];
-        $sql = "SELECT * FROM ventas_mercado WHERE id_usuario != $id_usuario";
+        $sql = sprintf(
+            "SELECT * FROM ventas_mercado WHERE id_usuario != %d",
+            $conn->real_escape_string($id_usuario)
+        );
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -83,7 +86,10 @@ class Item_mercado
     public static function getItemPorNombre($nombreItem)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $sql = "SELECT * FROM ventas_mercado WHERE nombre_item='$nombreItem'";
+        $sql = sprintf(
+            "SELECT * FROM ventas_mercado WHERE nombre_item='%s'",
+            $conn->real_escape_string($nombreItem)
+        );
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -102,7 +108,8 @@ class Item_mercado
         $yFin = $y + $altura - 1;
 
         $query = sprintf(
-            "SELECT x, y, anchura, altura FROM inventario_usuario WHERE id_usuario = $idUsuario",
+            "SELECT x, y, anchura, altura FROM inventario_usuario WHERE id_usuario = %d",
+            $conn->real_escape_string($idUsuario)
         );
         $result = $conn->query($query);
         if (!$result) {

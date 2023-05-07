@@ -13,7 +13,11 @@ class Item_subastas
         Item_subastas::actualizarTiempoRestante();
         $conn = Aplicacion::getInstance()->getConexionBd();
         $listaSubastas = [];
-        $sql = "SELECT * FROM subastas WHERE id_usuario != $id_usuario AND id_licitador != $id_usuario";
+        $sql = sprintf(
+            "SELECT * FROM subastas WHERE id_usuario != %d AND id_licitador != %d",
+            $conn->real_escape_string($id_usuario),
+            $conn->real_escape_string($id_usuario)
+        );
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -29,7 +33,10 @@ class Item_subastas
         Item_subastas::actualizarTiempoRestante();
         $conn = Aplicacion::getInstance()->getConexionBd();
         $listaPujas = [];
-        $sql = "SELECT * FROM subastas WHERE id_licitador = $licitador";
+        $sql = sprintf(
+            "SELECT * FROM subastas WHERE id_licitador = %d",
+            $conn->real_escape_string($licitador)
+        );
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -44,7 +51,10 @@ class Item_subastas
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $listaSubastas = [];
-        $sql = "SELECT * FROM subastas WHERE id_usuario = $id_usuario" ;
+        $sql = sprintf(
+            "SELECT * FROM subastas WHERE id_usuario = %d", 
+            $conn->real_escape_string($id_usuario)
+        );
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -57,7 +67,7 @@ class Item_subastas
 
     public static function actualizarTiempoRestante() {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = "SELECT id_subasta, fecha_limite FROM subastas";
+        $query = sprintf("SELECT id_subasta, fecha_limite FROM subastas");
         $result = $conn->query($query);
         if (!$result) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
@@ -79,8 +89,17 @@ class Item_subastas
                 $dias = $intervalo->d;
                 $horas = $intervalo->h;
                 $minutos = $intervalo->i;
-                $tiempo_restante = sprintf("%d:%d:%d", $dias, $horas, $minutos);
-                $update = sprintf("UPDATE subastas SET tiempo_restante = '%s' WHERE id_subasta = %d", $tiempo_restante, $id_subasta);
+                $tiempo_restante = sprintf(
+                    "%d:%d:%d", 
+                    $conn->real_escape_string($dias), 
+                    $conn->real_escape_string($horas), 
+                    $conn->real_escape_string($minutos)
+                );
+                $update = sprintf(
+                    "UPDATE subastas SET tiempo_restante = '%s' WHERE id_subasta = %d",
+                    $conn->real_escape_string($tiempo_restante),
+                    $conn->real_escape_string($id_subasta)
+                );
                 $conn->query($update);
             }
         }
@@ -89,24 +108,38 @@ class Item_subastas
         return true;
     }
 
-    public static function subastarItem($item, $idUsuario, $precio)
+    public static function subastarItem($item, $id_usuario, $precio)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $nombreItem = $item->getNombre();
 
         $fechaLimite = time() + (72 * 3600);
-        $fechaLimiteSql = date('Y-m-d H:i:s', $fechaLimite);
+        $fechaLimiteSql = date('Y-m-d H:i:s', $conn->real_escape_string($fechaLimite));
 
         do {
-            $idSubasta = rand(1, 1000); 
-            $comprobacion = sprintf("SELECT id_subasta FROM subastas WHERE id_usuario = %d AND id_subasta = %d", $idUsuario, $idSubasta);
+            $id_subasta = rand(1, 1000); 
+            $comprobacion = sprintf(
+                "SELECT id_subasta FROM subastas WHERE id_usuario = %d AND id_subasta = %d", 
+                $conn->real_escape_string($id_usuario), 
+                $conn->real_escape_string($id_subasta)
+            );
             $result = $conn->query($comprobacion);
         } while ($result->num_rows > 0); 
         $result->free();
         
-        $insert = sprintf("INSERT INTO `subastas` (`id_subasta`, `id_usuario`, `nombre_item`, `tipo`, `precio`, `id_licitador`, `fecha_limite`, `tiempo_restante`) VALUES (%d, %d, '%s', '%s', %f, %d, '%s', '%s')", $idSubasta, $idUsuario, $nombreItem, $item->getRareza(), $precio, NULL, $fechaLimiteSql, NULL);
+        $insert = sprintf(
+            "INSERT INTO `subastas` (`id_subasta`, `id_usuario`, `nombre_item`, `tipo`, `precio`, `id_licitador`, `fecha_limite`, `tiempo_restante`) VALUES (%d, %d, '%s', '%s', %f, %d, '%s', '%s')", 
+            $conn->real_escape_string($id_subasta), 
+            $conn->real_escape_string($id_usuario), 
+            $conn->real_escape_string($nombreItem), 
+            $conn->real_escape_string($item->getRareza()),
+            $conn->real_escape_string($precio), 
+            $conn->real_escape_string(NULL), 
+            $conn->real_escape_string($fechaLimiteSql), 
+            $conn->real_escape_string(NULL)
+        );
         Item_subastas::actualizarTiempoRestante();
-        Item::borrarDeInventario($nombreItem, $idUsuario, $item->getRareza());
+        Item::borrarDeInventario($nombreItem, $id_usuario, $item->getRareza());
         if (!$conn->query($insert)) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
             return false;
@@ -117,7 +150,12 @@ class Item_subastas
     public static function pujarItem($id_subasta, $precio, $licitador)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("UPDATE subastas SET precio = %f, id_licitador = %d WHERE id_subasta = %d", $precio, $licitador, $id_subasta);
+        $query = sprintf(
+            "UPDATE subastas SET precio = %f, id_licitador = %d WHERE id_subasta = %d", 
+            $conn->real_escape_string($precio), 
+            $conn->real_escape_string($licitador), 
+            $conn->real_escape_string($id_subasta)
+        );
         $result = $conn->query($query);
         if (!$result) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
@@ -131,7 +169,10 @@ class Item_subastas
     public static function terminarSubasta($id_subasta)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $itemSubasta = "SELECT * FROM subastas WHERE id_subasta = $id_subasta";
+        $itemSubasta = sprintf(
+            "SELECT * FROM subastas WHERE id_subasta = %d",
+            $conn->real_escape_string($id_subasta)
+        );
         $result = $conn->query($itemSubasta);
         $row = $result->fetch_assoc();
         $item = new Item_subastas($row['id_subasta'], $row['id_usuario'], $row['nombre_item'], $row['tipo'], $row['precio'], $row['id_licitador'], $row['fecha_limite'], $row['tiempo_restante']);
