@@ -34,11 +34,11 @@ function listarCompras()
         <div class="item">
 
             <div class="foto_item">
-                <img src='./css/img/img_items/{$venta->getNombreItem()}.png' alt='{$venta->getNombreItem()}'/>
+                <img src='./css/img/img_items/{$venta->getNombre()}.png' alt='{$venta->getNombre()}'/>
             </div>
 
             <div class="nombre_item">
-                {$venta->getNombreItem()}
+                {$venta->getNombre()}
             </div>
             
             <div class="nombre_usuario">

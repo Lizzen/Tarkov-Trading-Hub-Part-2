@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-04-2023 a las 20:03:10
+-- Tiempo de generación: 05-05-2023 a las 21:17:30
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -68,6 +68,23 @@ INSERT INTO `items` (`nombre`, `rareza`, `tamaño_inventario`, `filas`, `columna
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `subastas`
+--
+
+CREATE TABLE `subastas` (
+  `id_subasta` int(10) NOT NULL,
+  `id_usuario` int(255) NOT NULL,
+  `nombre_item` varchar(255) NOT NULL,
+  `tipo` varchar(255) NOT NULL,
+  `precio` float NOT NULL,
+  `id_licitador` int(255) DEFAULT NULL,
+  `fecha_limite` datetime DEFAULT NULL,
+  `tiempo_restante` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuarios`
 --
 
@@ -86,8 +103,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nombre_usuario`, `rol`, `email`, `capacidad_inventario`, `dinero`, `password`) VALUES
-(1, 'admin', 1, 'admin@gmail.com', 100, 3500, '$2y$10$pLpmHUCbJ5P6D0qkiyg.P.4pEkFfLdrNWTmORAwasXifrVrLOnTFW'),
-(19, 'user', 3, '', 40, 1700, '$2y$10$Nh/z2P.F5x7uVuO//me0EeWk7RSaTbK8Pw98du/46x6aNZDyPhfY.');
+(1, 'admin', 1, 'admin@gmail.com', 100, 3400, '$2y$10$pLpmHUCbJ5P6D0qkiyg.P.4pEkFfLdrNWTmORAwasXifrVrLOnTFW'),
+(19, 'user', 3, '', 40, 1800, '$2y$10$Nh/z2P.F5x7uVuO//me0EeWk7RSaTbK8Pw98du/46x6aNZDyPhfY.');
 
 -- --------------------------------------------------------
 
@@ -122,7 +139,8 @@ INSERT INTO `ventas_mercado` (`id_venta`, `id_usuario`, `nombre_item`, `tipo`, `
 --
 ALTER TABLE `inventario_usuario`
   ADD UNIQUE KEY `id_inv` (`id_inv`),
-  ADD KEY `id_usuario` (`id_usuario`);
+  ADD KEY `id_usuario` (`id_usuario`),
+  ADD KEY `fk_nombre_item` (`nombre_item`);
 
 --
 -- Indices de la tabla `items`
@@ -130,6 +148,11 @@ ALTER TABLE `inventario_usuario`
 ALTER TABLE `items`
   ADD PRIMARY KEY (`nombre`);
 
+--
+-- Indices de la tabla `subastas`
+--
+ALTER TABLE `subastas`
+  ADD PRIMARY KEY (`id_subasta`);
 --
 -- Indices de la tabla `usuarios`
 --
@@ -146,6 +169,12 @@ ALTER TABLE `ventas_mercado`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `subastas`
+--
+ALTER TABLE `subastas`
+  MODIFY `id_subasta` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
@@ -175,6 +204,13 @@ ALTER TABLE `inventario_usuario`
 --
 ALTER TABLE `ventas_mercado`
   ADD CONSTRAINT `fk_id_usuario_mer` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+--
+-- Filtros para la tabla `subastas`
+--
+ALTER TABLE `subastas`
+  ADD CONSTRAINT `fk_id_usuario_sub` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

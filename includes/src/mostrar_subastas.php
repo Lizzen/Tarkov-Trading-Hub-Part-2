@@ -1,12 +1,36 @@
 <?php
 use es\ucm\fdi\aw\clases\usuarios\FormularioSubastas;
+use es\ucm\fdi\aw\clases\usuarios\FormularioPujas;
 use es\ucm\fdi\aw\clases\Item_subastas;
 use es\ucm\fdi\aw\clases\Item;
 use es\ucm\fdi\aw\clases\usuarios\Usuario;
 
-function muestra_subastas()
+function muestra_inicio()
+{
+
+}
+
+function muestra_inventario()
 {
     $html = listarItems($_SESSION['idUsuario']);
+    echo $html;
+}
+
+function muestra_mis_subastas()
+{
+    $html = misSubastas($_SESSION['idUsuario']);
+    echo $html;
+}
+
+function muestra_pujas()
+{
+    $html = listarSubastas($_SESSION['idUsuario']);
+    echo $html;
+}
+
+function muestra_mis_pujas()
+{
+    $html = misPujas($_SESSION['idUsuario']);
     echo $html;
 }
 
@@ -26,16 +50,16 @@ function listarItems($idUsuario)
         $items .= <<<EOS
         <div class="item">
 
+            <div class="foto_item">
+                <img src='./css/img/img_items/{$item->getNombre()}.png' alt='{$item->getNombre()}'/>
+            </div>
+
             <div class="nombre_item">
                 {$item->getNombre()}
             </div>
             
             <div class="rareza">
                 {$item->getRareza()}
-            </div>
-
-            <div class="precio_item">
-                {$precio} 
             </div>
 
             <div class="subastar_item">
@@ -45,32 +69,93 @@ function listarItems($idUsuario)
         </div>
         EOS;
     }
+
+    $html = <<<EOS
+    <div class="guia">
+        <div class = "div-opacidad">Imagen</div>
+        <div class = "div-opacidad">Item</div>
+        <div class = "div-opacidad">Rareza</div>
+        <div class = "div-opacidad">Subastar</div>
+    </div>
+    <div class="lista_items">
+        {$items}
+    </div>
+    EOS;
+
+    return $html;
 }
 
-function listarSubastas()
+function misSubastas($idUsuario)
 {
-    $listaItems = Item_subastas::itemsSubastas($_SESSION['idUsuario']);
+    $listaItems = Item_subastas::itemsUsuario($idUsuario);
+    if (empty($listaItems)) {
+        return '<p>No tienes items en subasta</p>';
+    }
+
+    $items = '';
+    foreach ($listaItems as $subasta) {
+
+        $formularioSubastas = new FormularioSubastas($subasta, $idUsuario);        
+
+        $items .= <<<EOS
+        <div class="item">
+
+            <div class="foto_item">
+                <img src='./css/img/img_items/{$subasta->getNombre()}.png' alt='{$subasta->getNombre()}'/>
+            </div>
+
+            <div class="nombre_item">
+                {$subasta->getNombre()}
+            </div>
+            
+            <div class="rareza">
+                {$subasta->getRareza()}
+            </div>
+
+            <div class="precio_item">
+                {$subasta->getPrecio()} 
+            </div>
+
+        </div>
+        EOS;
+    }
+
+    $html = <<<EOS
+    <div class="guia">
+        <div class = "div-opacidad">Imagen</div>
+        <div class = "div-opacidad">Item</div>
+        <div class = "div-opacidad">Rareza</div>
+        <div class = "div-opacidad">Precio</div>
+    </div>
+    <div class="lista_items">
+        {$items}
+    </div>
+    EOS;
+
+    return $html;
+}
+
+function listarSubastas($idUsuario)
+{
+    $listaItems = Item_subastas::itemsSubastas($idUsuario);
     if (empty($listaItems)) {
         return '<p>No hay items en subasta</p>';
     }
 
     $items = '';
     foreach ($listaItems as $subasta) {
-        $precio = $subasta->getPrecio();
-        $tipo = $subasta->getTipo();
-
-        $formularioSubastas = new FormularioSubastas($subasta, $_SESSION['idUsuario']);
-        $botonPuja = $formularioSubastas->gestiona();        
+        $formularioPujas = new FormularioPujas($subasta, $idUsuario);
+        $botonPuja = $formularioPujas->gestiona();        
 
         $items .= <<<EOS
         <div class="item">
 
             <div class="foto_item">
-                <img src='./css/img/img_items/{$subasta->getNombreItem()}.png' alt='{$subasta->getNombreItem()}'/>
+                <img src='./css/img/img_items/{$subasta->getNombre()}.png' alt='{$subasta->getNombre()}'/>
             </div>
 
             <div class="nombre_item">
-                {$subasta->getNombreItem()}
+                {$subasta->getNombre()}
             </div>
             
             <div class="nombre_usuario">
@@ -78,7 +163,7 @@ function listarSubastas()
             </div>
 
             <div class="precio_item">
-                {$precio} 
+                {$subasta->getPrecio()} 
             </div>
 
             <div class="pujar_item">
@@ -91,9 +176,9 @@ function listarSubastas()
 
     $html = <<<EOS
     <div class="guia">
-        <div>Foto</div>
-        <div class = "div-opacidad">Nombre item</div>
-        <div class = "div-opacidad">Nombre usuario</div>
+        <div class = "div-opacidad">Imagen</div>
+        <div class = "div-opacidad">item</div>
+        <div class = "div-opacidad">usuario</div>
         <div class = "div-opacidad">Precio</div>
         <div class = "div-opacidad">Pujar</div>
     </div>
@@ -103,5 +188,53 @@ function listarSubastas()
     EOS;
 
     return $html;
+}
+
+function misPujas($idUsuario)
+{
+    $listaItems = Item_subastas::itemsPujas($idUsuario);
+    if (empty($listaItems)) {
+        return '<p>No tienes ninguna puja activa</p>';
+    }
+
+    $items = '';
+    foreach ($listaItems as $subasta) {   
+
+        $items .= <<<EOS
+        <div class="item">
+
+            <div class="foto_item">
+                <img src='./css/img/img_items/{$subasta->getNombre()}.png' alt='{$subasta->getNombre()}'/>
+            </div>
+
+            <div class="nombre_item">
+                {$subasta->getNombre()}
+            </div>
+            
+            <div class="nombre_usuario">
+                {$subasta->getNombreUsuario($subasta->getId_usuario())}
+            </div>
+
+            <div class="precio_item">
+                {$subasta->getPrecio()} 
+            </div>
+
+        </div>
+        EOS;
+    }
+    
+        $html = <<<EOS
+        <div class="guia">
+            <div class = "div-opacidad">Imagen</div>
+            <div class = "div-opacidad">item</div>
+            <div class = "div-opacidad">usuario</div>
+            <div class = "div-opacidad">Precio</div>
+        </div>
+        <div class="lista_items">
+            {$items}
+        </div>
+        EOS;
+    
+        return $html;
 }
 ?>
