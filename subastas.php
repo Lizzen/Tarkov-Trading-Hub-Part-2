@@ -7,6 +7,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
 }
 
 $tituloPagina = 'Subastas';
+$id = $_GET['id'];
 $contenidoPrincipal=<<<EOS
 <!DOCTYPE html>
 <html lang="es">
@@ -22,5 +23,5 @@ $contenidoPrincipal=<<<EOS
 </html>
 EOS;
 
-$params = ['tituloPagina' => $tituloPagina, 'contenidoPrincipal' => $contenidoPrincipal];
+$params = ['tituloPagina' => $tituloPagina, 'contenidoPrincipal' => $contenidoPrincipal, 'id' => $id];
 $app->generaVista('/plantillas/plantilla_subastas.php', $params);

@@ -14,3 +14,24 @@
     });
   });
 //});
+
+// Seleccionar la imagen y los summaries
+const toggleSummaries = document.getElementById('toggleSummaries');
+const toggles = document.getElementsByTagName('summary');
+const inventario = document.getElementById('inventario');
+const sidebar = document.getElementById("sidebar");
+
+// Al hacer clic en la imagen, se ocultan o muestran todos los summaries
+toggleSummaries.addEventListener('click', function() {
+  for (let i = 0; i < toggles.length; i++) {
+    if (toggles[i].style.display === 'none') {
+      toggles[i].style.display = 'block';
+      inventario.style.display = 'block';
+      sidebar.style.width = "12%";
+    } else {
+      toggles[i].style.display = 'none';
+      inventario.style.display = 'none';
+      sidebar.style.width = "5%";
+    }
+  }
+});

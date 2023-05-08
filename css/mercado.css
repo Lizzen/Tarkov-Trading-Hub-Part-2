@@ -60,13 +60,12 @@ footer {
 .item .foto_item,
 .item .nombre_item,
 .item .nombre_usuario,
-.item .precio_item {
+.item .precio_item{
   width: 20%;
   height: 8em;
   min-height: 8em;
   max-height: 8em;
-  min-width: 20%;
-  max-width: 20%;
+  max-width: 15%;
   margin: 0.3%;
   padding: 1em;
   margin-left: 0.5%;
@@ -75,6 +74,21 @@ footer {
   align-items: center;
   justify-content: center;
   background-color: hsla(0, 0%, 100%, 0.05);
+}
+
+.item .comprar_item{
+    width: 20%;
+  height: 8em;
+  min-height: 8em;
+  max-height: 8em;
+  max-width: 15%;
+  margin: 0.3%;
+  padding: 1em;
+  margin-left: 0.5%;
+  margin-right: 0%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .item:hover .foto_item,
@@ -112,4 +126,87 @@ footer {
   margin-left: 0%;
   width: 6em;
   height: 6em;
+}
+
+.container {
+  background-color: #0c0c12;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.row {
+  display: flex;
+
+  justify-content: center;
+}
+
+.box {
+  background-color: #1a1a24;
+  border-radius: 10px;
+  color: #9a8865;
+  margin: 10px;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  height: 110%;
+  width: 100%;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 20px;
+  text-align: center;
+}
+
+.details {
+  background-color: #9a8865;
+  bottom: 0;
+  color: #0c0c12;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  margin-top: 40px;
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.detail-button {
+  background-color: #9a8865;
+  border: none;
+  border-radius: 5px;
+  color: #0c0c12;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 2% 5%;
+  transition: all 0.3s ease-in-out;
+}
+
+.detail-button:hover{
+  background-color: #0c0c12;
+  color: #9a8865;
+}
+
+.detail-text {
+  color: #0c0c12;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.box:hover {
+  box-shadow: 0px 0px 15px #9a8865;
+  transform: translateY(-5px);
+}
+
+.details:hover {
+  background-color: #0c0c12;
+}
+
+.detail-text:hover {
+  color: #9a8865;
 }

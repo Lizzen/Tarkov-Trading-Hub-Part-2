@@ -75,8 +75,8 @@ details[open] summary {
 }
 
 .icon-small {
-  width: 40px;
-  height: 40px;
+  width: 130%;
+  height: 100%;
   margin-right: 15px;
   transition: all 0.3s ease;
   filter: brightness(60%);
@@ -98,7 +98,7 @@ details[open] summary {
 .elem-imagen  {
   position: relative;
   margin-right: 10px;
-  width: 40px;
+  width: 30px;
   height: 40px;
 }
 

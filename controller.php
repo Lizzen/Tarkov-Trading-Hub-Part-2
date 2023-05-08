@@ -3,6 +3,7 @@
 require_once __DIR__ . '/includes/config.php';
 
 use es\ucm\fdi\aw\clases\Item;
+use es\ucm\fdi\aw\clases\Item_subastas;
 
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if(isset($_GET['identifier']) && $_GET['identifier'] === "getInventario") {
@@ -16,6 +17,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             Item::actualizarItemInventario($idUsuario, $item);
         }
     } 
+    else if (isset($_POST['identifier']) && $_POST['identifier'] === "actualizaTiempoRestante"){
+      Item_subastas::actualizarTiempoRestante();
+    }
     else {
       header('HTTP/1.1 400 Bad Request');
       echo "Petición AJAX no reconocida";
