@@ -12,12 +12,11 @@ $app = Aplicacion::getInstance();
 
 <div class="nav-wrapper" id="sidebar">
 	<div class="nav-menu">
-
-		<div class="elem-caja">
+		<!--<div class="elem-caja">
 			<div class="elem-imagen">
-				<!--<img src="./css/img/sidebar.png" id="toggleSummaries" alt="inventario" class="icon-small">-->
+				<img src="./css/img/sidebar.png" id="toggleSummaries" alt="inventario" class="icon-small">
 			</div>
-		</div>
+		</div>-->
 
 		<div class="elem-caja">
 			<div class="elem-imagen">
