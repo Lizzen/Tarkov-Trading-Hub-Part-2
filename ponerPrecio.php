@@ -6,7 +6,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
     exit();
 }
 
-$formVenta = new \es\ucm\fdi\aw\clases\usuarios\FormularioVenta($_GET['item']);
+$formVenta = new \es\ucm\fdi\aw\clases\usuarios\FormularioVenta($_GET['idItem']);
 $formVenta = $formVenta->gestiona();
 
 $tituloPagina = 'Venta Mercado';

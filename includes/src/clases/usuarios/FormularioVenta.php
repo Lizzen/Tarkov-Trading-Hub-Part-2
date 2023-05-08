@@ -8,15 +8,15 @@ use es\ucm\fdi\aw\clases\Item_mercado;
 
 class FormularioVenta extends Formulario
 {
-    private $item;
+    private $idItem;
 
-    public function __construct($item)
+    public function __construct($idItem)
     {
         parent::__construct('formVenta', [
             'method' => 'POST',
             'urlRedireccion' => Aplicacion::getInstance()->resuelve('./venta.php'),
         ]);
-        $this->item = $item;
+        $this->idItem = $idItem;
     }
 
     protected function generaCamposFormulario(&$datos)
