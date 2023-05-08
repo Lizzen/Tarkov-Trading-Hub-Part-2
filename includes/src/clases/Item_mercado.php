@@ -7,6 +7,23 @@ use es\ucm\fdi\aw\clases\usuarios\Usuario;
 
 class Item_mercado
 {
+    public static function venderItem($item) {
+        Item::eliminarItemInventario($item->getNombreItem(), $item->getId_usuario());
+        self::aniadirItemMercado($item);
+    }
+
+    public static function aniadirItemMercado($item) {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $insert = sprintf("INSERT INTO `ventas_mercado` (`id_usuario`, `nombre_item`, `tipo`, `precio`, `nombre_intercambio`) 
+                            VALUES (%d, '%s', '%s', %d, ,'%s')", 
+                            $item->getId_usuario(), $conn->real_escape_string($item->getNombreItem()), $conn->real_escape_string($item->getTipo()),
+                            $item->getPrecio(), $conn->real_escape_string($item->getNombre_intercambio()));
+        if (!$conn->query($insert)) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            return false;
+        }
+        return true;
+    }
 
     public static function itemsVenta($id_usuario)
     {
@@ -38,14 +55,14 @@ class Item_mercado
                 // Mandar dinero a vendedor
                 Usuario::sumaDinero($item->getPrecio(), $item->getId_usuario());
 
-                Item_mercado::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
+                self::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
                 break;
 
             case 'intercambio':
                 // Pasan item a tu inventario ¿comprobar si cabe item?
                 Item::aniadirAInventario($item, $id_usuario_comprador);
 
-                Item_mercado::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
+                self::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
                 break;
 
             case 'dual':
@@ -58,7 +75,7 @@ class Item_mercado
                 Item::aniadirAInventario($item, $item->getId_usuario());
 
                 // Eliminar item mercado
-                Item_mercado::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
+                self::borraPorItemYUsuario($item->getNombreItem(), $item->getId_usuario());
                 break;
         }
     }

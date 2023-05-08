@@ -4,6 +4,16 @@ namespace es\ucm\fdi\aw\clases;
 use es\ucm\fdi\aw\Aplicacion;
 
 class Item {
+
+    public static function eliminarItemInventario($nombreItem, $idUsuario) {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $sql = sprintf("DELETE FROM inventario_usuario WHERE nombre_item = '%s' AND id_usuario = '%d'", $conn->real_escape_string($nombreItem), $idUsuario);
+        if (!$conn->query($sql)) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            return false;
+        }
+        return true;
+    }
     public static function listarInventario($idUsuario) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $inventario = [];

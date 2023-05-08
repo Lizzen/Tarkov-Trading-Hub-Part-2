@@ -34,7 +34,7 @@ $mensajes = mensajesPeticionAnterior();
 				<h3>Dinero: <?= $user->getDinero() ?>$</h3>
 			</div>
 
-			<?= mostrarInventario(($_SESSION["idUsuario"])) ?>
+			<?= mostrarInventario(($_SESSION['idUsuario'])) ?>
 		</div>
 	</main>
 	<?php require('includes/vistas/comun/pie.php'); ?>
