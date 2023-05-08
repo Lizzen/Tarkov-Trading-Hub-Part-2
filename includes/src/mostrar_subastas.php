@@ -7,7 +7,41 @@ use es\ucm\fdi\aw\clases\usuarios\Usuario;
 
 function muestra_inicio()
 {
+    $html = <<<EOS
+    <div class="container">
+        <div class="row">
+            <div class="box">
+                <div class="title">Subastas</div>
+                <div class="details">
+                    <button class="detail-button" onclick="window.location.href='subastas.php?id=subastar'">Ver detalles</button>
+                </div>
+            </div>
+        
+            <div class="box">
+                <div class="title">Mis subastas</div>
+                <div class="details">
+                    <button class="detail-button" onclick="window.location.href='subastas.php?id=mis_subastas'">Ver detalles</button>
+                </div>
+            </div>
+        
+            <div class="box">
+                <div class="title">Pujas</div>
+                <div class="details">
+                    <button class="detail-button" onclick="window.location.href='subastas.php?id=pujar'">Ver detalles</button>
+                </div>
+            </div>
+        
+            <div class="box">
+                <div class="title">Mis pujas</div>
+                <div class="details">
+                    <button class="detail-button" onclick="window.location.href='subastas.php?id=mis_pujas'">Ver detalles</button>
+                </div>
+            </div>
+        </div>
+    </div>  
+    EOS;
 
+    echo $html;
 }
 
 function muestra_inventario()

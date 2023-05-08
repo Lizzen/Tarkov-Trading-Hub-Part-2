@@ -18,6 +18,7 @@
 	<main>
 		<div class="contenido">
 			<?= $params['contenidoPrincipal'] ?>
+			<p>La comunidad está en mantenimiento. Mientras tanto disfrute del servidor :)</p>
 		</div>
 	</main>
 	<?php require('includes/vistas/comun/pie.php'); ?>

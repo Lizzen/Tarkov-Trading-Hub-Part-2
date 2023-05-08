@@ -6,10 +6,41 @@ use es\ucm\fdi\aw\clases\usuarios\FormularioCompra;
 function muestra_mercado()
 {
     $html = listarCompras();
-    //$formCompra = new FormularioCompra();
-    //$formCompra->gestiona(['item' => $item, 'id_usuario_comprador' => $_SESSION['idUsuario']]);   
     echo $html;
 }
+
+function muestra_inicio()
+{
+    $html = <<<EOS
+    <div class="container">
+        <div class="row">
+            <div class="box">
+                <div class="title">Comprar</div>
+                <div class="details">
+                    <button class="detail-button" onclick="window.location.href='mercado.php?id=compra'">Ver detalles</button>
+                </div>
+            </div>
+        
+            <div class="box">
+                <div class="title">Vender</div>
+                <div class="details">
+                    <button class="detail-button" onclick="window.location.href='mercado.php?id=venta'">Ver detalles</button>
+                </div>
+            </div>
+        
+            <div class="box">
+                <div class="title">Mis ventas</div>
+                <div class="details">
+                    <button class="detail-button" onclick="window.location.href='mercado.php?id=mis_ventas'">Ver detalles</button>
+                </div>
+            </div>
+        </div>
+    </div>  
+    EOS;
+
+    echo $html;
+}
+
 function listarCompras()
 {
     $listaItems = Item_mercado::itemsVenta($_SESSION['idUsuario']);
