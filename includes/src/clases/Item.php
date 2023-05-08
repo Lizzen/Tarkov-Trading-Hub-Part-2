@@ -19,6 +19,27 @@ class Item {
         }
         return $inventario;
     }
+
+    public static function listarItems() {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $sql = "SELECT DISTINCT nombre FROM items";
+        $result = $conn->query($sql);
+        $nombres = [];
+        if($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $nombres[] = $row;
+            }
+        }
+        return $nombres;
+    }
+
+    public static function obtenerRareza($nombreItem){
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $sql = sprintf("SELECT DISTINCT rareza FROM items WHERE nombre_item='%s'",$conn->real_escape_string($nombreItem));
+        $result = $conn->query($sql);
+        return $result;
+    }
+
     public static function actualizarItemInventario($idUsuario, $item) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $sql = sprintf("UPDATE inventario_usuario 

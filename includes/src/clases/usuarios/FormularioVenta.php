@@ -5,6 +5,7 @@ namespace es\ucm\fdi\aw\clases\usuarios;
 use es\ucm\fdi\aw\Aplicacion;
 use es\ucm\fdi\aw\Formulario;
 use es\ucm\fdi\aw\clases\Item_mercado;
+use es\ucm\fdi\aw\clases\Item;
 
 class FormularioVenta extends Formulario
 {
@@ -21,21 +22,27 @@ class FormularioVenta extends Formulario
 
     protected function generaCamposFormulario(&$datos)
     {
+        $nombres = Item::listarItems();
+        $htmlNombres = '';
+        foreach($nombres as $nombre) {
+            $htmlNombres .= <<<EOS
+            <label>
+                <input type="radio" name="nombre_item" value="{$nombre}"/> {$nombre}
+            </label>
+            EOS;
+        }
+
         $camposFormulario = <<<EOS
         <fieldset>
-        <legend>Elige el tipo de transacción</legend>
-            <label>
-                <input type="radio" name="tipo" value="dinero"/> Dinero
-            </label>
-            <label>
-                <input type="radio" name="tipo" value="intercambio"/> Intercambio
-            </label>
-            <label>
-                <input type="radio" name="tipo" value="dual"/> Dual
-            </label>
+            <legend>Elige un item para el intercambio</legend>
+            $htmlNombres
+            <legend>Pon un precio</legend>
+            <input type="number" name="precio" min="0">
             <div>
                 <button type="submit" name="seleccion">Enviar</button>
+                <button type="reset" name="borrar">Borrar</button>
             </div>
+        <legend>
         </fieldset>
         EOS;
         return $camposFormulario;
@@ -43,20 +50,15 @@ class FormularioVenta extends Formulario
 
     protected function procesaFormulario(&$datos)
     {
-        if($datos['tipo'] == "dinero") {
-            
+        if($datos['nombre_item'] != null && $datos['precio'] > 0) {
+            $tipo = "dual";
         }
-        else if($datos['tipo'] == "intercambio") {
-
+        else if($datos['nombre_item'] == null && $datos['precio'] > 0) {
+            $tipo = "dinero";
         }
-        else {
-
-        }
-        //crear item
+        else $tipo = "intercambio";
         $idventa = rand(1, 1000);
-        $item = new Item_mercado($idventa, );
-        if (isset($datos['vender'])) {
-            Item_mercado::venderItem($item, $_SESSION['idUsuario']);
-        }
+        $item = new Item_mercado($idventa, $this->nombreItem, $_SESSION['idUsuario'], $tipo, $datos['precio'], $datos['nombre_item']);
+        Item_mercado::venderItem($item, $_SESSION['idUsuario']);
     }
 }

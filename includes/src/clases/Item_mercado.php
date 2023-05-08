@@ -8,7 +8,8 @@ use es\ucm\fdi\aw\clases\usuarios\Usuario;
 class Item_mercado
 {
     public static function venderItem($item, $id_usuario) {
-        Item::borrarDeInventario($item->getNombre(), $id_usuario, $item->getRareza());
+        $rareza = Item::obtenerRareza($item->getNombre());
+        Item::borrarDeInventario($item->getNombre(), $id_usuario, $rareza);
         self::aniadirItemMercado($item);
     }
 
