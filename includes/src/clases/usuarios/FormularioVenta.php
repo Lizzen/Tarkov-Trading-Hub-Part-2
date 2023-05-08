@@ -8,33 +8,55 @@ use es\ucm\fdi\aw\clases\Item_mercado;
 
 class FormularioVenta extends Formulario
 {
-    private $idItem;
+    private $nombreItem;
 
-    public function __construct($idItem)
+    public function __construct($nombreItem)
     {
         parent::__construct('formVenta', [
             'method' => 'POST',
             'urlRedireccion' => Aplicacion::getInstance()->resuelve('./venta.php'),
         ]);
-        $this->idItem = $idItem;
+        $this->nombreItem = $nombreItem;
     }
 
     protected function generaCamposFormulario(&$datos)
     {
         $camposFormulario = <<<EOS
-        
+        <fieldset>
+        <legend>Elige el tipo de transacción</legend>
+            <label>
+                <input type="radio" name="tipo" value="dinero"/> Dinero
+            </label>
+            <label>
+                <input type="radio" name="tipo" value="intercambio"/> Intercambio
+            </label>
+            <label>
+                <input type="radio" name="tipo" value="dual"/> Dual
+            </label>
+            <div>
+                <button type="submit" name="seleccion">Enviar</button>
+            </div>
+        </fieldset>
         EOS;
         return $camposFormulario;
     }
 
     protected function procesaFormulario(&$datos)
     {
-        //codigo js para preguntar precio
-        //js para saber si intercambio que, si es asi, preguntar objeto
-        echo '<script src="./js/venta.js"></script>';
+        if($datos['tipo'] == "dinero") {
+            
+        }
+        else if($datos['tipo'] == "intercambio") {
+
+        }
+        else {
+
+        }
         //crear item
+        $idventa = rand(1, 1000);
+        $item = new Item_mercado($idventa, );
         if (isset($datos['vender'])) {
-            Item_mercado::venderItem($this->item->getNombre(), $_SESSION['idUsuario']);
+            Item_mercado::venderItem($item, $_SESSION['idUsuario']);
         }
     }
 }

@@ -38,7 +38,7 @@ function listarVentas()
             </div>
 
             <div class="vender_item">
-                <button onclick="window.location.href='ponerPrecio.php?item={$item->getIdInv()}';">Vender</button>
+                <button onclick="window.location.href='ponerPrecio.php?item={$item->getNombre()}';">Vender</button>
             </div>
 
         </div>

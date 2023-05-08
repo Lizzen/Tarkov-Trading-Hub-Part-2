@@ -2,16 +2,6 @@
 namespace es\ucm\fdi\aw\clases;
 use es\ucm\fdi\aw\Aplicacion;
 class Item {
-
-    public static function eliminarItemInventario($nombreItem, $idUsuario) {
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $sql = sprintf("DELETE FROM inventario_usuario WHERE nombre_item = '%s' AND id_usuario = '%d'", $conn->real_escape_string($nombreItem), $idUsuario);
-        if (!$conn->query($sql)) {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-            return false;
-        }
-        return true;
-    }
     public static function listarInventario($idUsuario) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $inventario = [];
@@ -103,7 +93,7 @@ class Item {
         return true;
     }
 
-    public static function buscaIdItem($item, $rareza)
+    /*public static function buscaIdItem($item, $rareza)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
 
@@ -119,7 +109,7 @@ class Item {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
         return $result;
-    }
+    }*/
     public static function buscaItem($nombreItem)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
@@ -146,7 +136,7 @@ class Item {
     private $columnas;
     private $pos_x;
     private $pos_y;
-    private function __construct($nombre, $rareza,$tamaño_inventario, $filas, $columnas,$pos_x,$pos_y) {
+    private function __construct($nombre, $rareza, $tamaño_inventario, $filas, $columnas, $pos_x, $pos_y) {
         $this->nombre = $nombre;
         $this->rareza = $rareza;
         $this->tamaño_inventario = $tamaño_inventario;

@@ -7,8 +7,8 @@ use es\ucm\fdi\aw\clases\usuarios\Usuario;
 
 class Item_mercado
 {
-    public static function venderItem($item) {
-        Item::eliminarItemInventario($item->getNombreItem(), $item->getId_usuario());
+    public static function venderItem($item, $id_usuario) {
+        Item::borrarDeInventario($item->getNombre(), $id_usuario, $item->getRareza());
         self::aniadirItemMercado($item);
     }
 
@@ -73,7 +73,7 @@ class Item_mercado
                 Usuario::restaDinero($item->getPrecio(), $id_usuario_comprador);
                 Item::aniadirAInventario($item, $id_usuario_comprador);
 
-                // Mandar dinero y item a vendedor
+                // Mandar dinero e item a vendedor
                 Usuario::sumaDinero($item->getPrecio(), $item->getId_usuario());
                 Item::aniadirAInventario($item, $item->getId_usuario());
 
