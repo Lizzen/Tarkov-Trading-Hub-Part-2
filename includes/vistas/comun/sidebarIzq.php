@@ -35,9 +35,9 @@ $app = Aplicacion::getInstance();
 				<details>
 					<summary>Mercado</summary>
 					<a href="./mercado.php?id=inicio" class="a-inventory">Inicio</a>
-					<a href="./mercado.php?id=compra" class="a-inventory">Comprar</a>
-					<a href="./mercado.php?id=venta" class="a-inventory">Vender</a>
-					<a href="./mercado.php?id=mis_ventas" class="a-inventory">Mis Ventas</a>
+					<a href="./mercado.php" class="a-inventory">Comprar</a>
+					<a href="./ponerPrecio.php" class="a-inventory">Vender</a>
+					<a href="./venta.php" class="a-inventory">Mis Ventas</a>
 				</details>
 			</div>
 		</div>

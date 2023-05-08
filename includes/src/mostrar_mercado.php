@@ -17,21 +17,21 @@ function muestra_inicio()
             <div class="box">
                 <div class="title">Comprar</div>
                 <div class="details">
-                    <button class="detail-button" onclick="window.location.href='mercado.php?id=compra'">Ver detalles</button>
+                    <button class="detail-button" onclick="window.location.href='mercado.php'">Ver detalles</button>
                 </div>
             </div>
         
             <div class="box">
                 <div class="title">Vender</div>
                 <div class="details">
-                    <button class="detail-button" onclick="window.location.href='mercado.php?id=venta'">Ver detalles</button>
+                    <button class="detail-button" onclick="window.location.href='ponerPrecio.php'">Ver detalles</button>
                 </div>
             </div>
         
             <div class="box">
                 <div class="title">Mis ventas</div>
                 <div class="details">
-                    <button class="detail-button" onclick="window.location.href='mercado.php?id=mis_ventas'">Ver detalles</button>
+                    <button class="detail-button" onclick="window.location.href='venta.php'">Ver detalles</button>
                 </div>
             </div>
         </div>

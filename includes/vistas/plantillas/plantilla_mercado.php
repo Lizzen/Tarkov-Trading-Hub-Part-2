@@ -18,12 +18,10 @@ include_once './includes/src/mostrar_mercado.php'
 	<main>
 		<div class="contenido">
 			<?= $params['contenidoPrincipal'] ?>
-			<?php 
+			<?= 
 				$id = $params['id'];
 				if ($id == 'inicio') {muestra_inicio();}
-				else if ($id == 'compra') { muestra_mercado();} 
-				else if ($id == 'venta') { muestra_mercado();}
-				else if ($id == 'mis_ventas') {muestra_mercado();}
+				else {muestra_mercado();}
 			?>
 		</div>
 	</main>
