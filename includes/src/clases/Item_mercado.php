@@ -7,7 +7,8 @@ use es\ucm\fdi\aw\clases\usuarios\Usuario;
 
 class Item_mercado
 {
-    public static function venderItem($item, $id_usuario) {
+    public static function venderItem($idventa, $nombreItem, $id_usuario, $tipo, $precio, $nombre_item_cambio) {
+        $item = new Item_mercado($idventa, $nombreItem, $id_usuario, $tipo, $precio, $nombre_item_cambio);
         $rareza = Item::obtenerRareza($item->getNombre());
         Item::borrarDeInventario($item->getNombre(), $id_usuario, $rareza);
         self::aniadirItemMercado($item);

@@ -24,7 +24,7 @@ function muestra_inicio()
             <div class="box">
                 <div class="title">Vender</div>
                 <div class="details">
-                    <button class="detail-button" onclick="window.location.href='ponerPrecio.php'">Ver detalles</button>
+                    <button class="detail-button" onclick="window.location.href='venta.php'">Ver detalles</button>
                 </div>
             </div>
         

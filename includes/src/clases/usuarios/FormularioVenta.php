@@ -50,15 +50,17 @@ class FormularioVenta extends Formulario
 
     protected function procesaFormulario(&$datos)
     {
-        if($datos['nombre_item'] != null && $datos['precio'] > 0) {
+        $precio = $datos['precio'];
+        $nombre_item_cambio = $datos['nombre_item'];
+
+        if($nombre_item_cambio != null && $precio > 0) {
             $tipo = "dual";
         }
-        else if($datos['nombre_item'] == null && $datos['precio'] > 0) {
+        else if($nombre_item_cambio == null && $precio > 0) {
             $tipo = "dinero";
         }
         else $tipo = "intercambio";
         $idventa = rand(1, 1000);
-        $item = new Item_mercado($idventa, $this->nombreItem, $_SESSION['idUsuario'], $tipo, $datos['precio'], $datos['nombre_item']);
-        Item_mercado::venderItem($item, $_SESSION['idUsuario']);
+        Item_mercado::venderItem($idventa, $this->nombreItem, $_SESSION['idUsuario'], $tipo, $precio, $nombre_item_cambio);
     }
 }

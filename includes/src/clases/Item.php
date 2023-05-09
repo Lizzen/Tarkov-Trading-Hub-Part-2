@@ -35,7 +35,7 @@ class Item {
 
     public static function obtenerRareza($nombreItem){
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $sql = sprintf("SELECT DISTINCT rareza FROM items WHERE nombre_item='%s'",$conn->real_escape_string($nombreItem));
+        $sql = sprintf("SELECT DISTINCT rareza FROM items WHERE nombre='%s'",$conn->real_escape_string($nombreItem));
         $result = $conn->query($sql);
         return $result;
     }
