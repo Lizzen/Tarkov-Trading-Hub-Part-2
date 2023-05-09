@@ -1,7 +1,3 @@
-<?php
-include_once './includes/src/ponerVenta.php'
-?>
-
 <!DOCTYPE html>
 <html>
 
