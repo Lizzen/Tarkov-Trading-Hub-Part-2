@@ -15,6 +15,10 @@
   });
 //});
 
+/*----------------------------------------------------------
+  ----Función sidebar despegable totalmente funcional----
+  ----------------------------------------------------------
+
 // Seleccionar la imagen y los summaries
 const toggleSummaries = document.getElementById('toggleSummaries');
 const toggles = document.getElementsByTagName('summary');
@@ -35,3 +39,4 @@ toggleSummaries.addEventListener('click', function() {
     }
   }
 });
+*/

@@ -39,8 +39,8 @@ class FormularioVenta extends Formulario
             <legend>Pon un precio</legend>
             <input type="number" name="precio" min="0">
             <div>
-                <button type="submit" name="seleccion">Enviar</button>
-                <button type="reset" name="borrar">Borrar</button>
+                <button class="btn" type="submit" name="seleccion">Enviar</button>
+                <button class="btn" type="reset" name="borrar">Borrar</button>
             </div>
         <legend>
         </fieldset>

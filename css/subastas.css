@@ -83,27 +83,11 @@ footer {
 .item:hover .foto_item,
 .item:hover .nombre_item,
 .item:hover .nombre_usuario,
+.item:hover .pujar_item,
+.item:hover .subastar_item,
+.item:hover .rareza,
 .item:hover .precio_item {
   background-color: hsla(0, 0%, 100%, 0.08);
-}
-
-.boton_comprar {
-  margin-left: 5%;
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.btn_compra {
-  font-size: 1em;
-  background-color: #216130;
-  color: white;
-  padding: 1em 1em;
-  border-radius: 1em;
-  cursor: pointer;
-  float: right;
-  text-align: right;
-  margin-right: 50%;
-
 }
 
 .container {

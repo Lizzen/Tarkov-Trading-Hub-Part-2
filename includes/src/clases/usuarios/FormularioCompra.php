@@ -15,7 +15,7 @@ class FormularioCompra extends Formulario
     {
         parent::__construct('formCompra', [
             'method' => 'POST',
-            'urlRedireccion' => Aplicacion::getInstance()->resuelve('./mercado.php'),
+            'urlRedireccion' => Aplicacion::getInstance()->resuelve('./mercado.php?id=compra'),
         ]);
         $this->item = $item;
         $this->id_usuario_comprador = $id_usuario_comprador;

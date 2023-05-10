@@ -60,6 +60,10 @@ footer {
 .item .foto_item,
 .item .nombre_item,
 .item .nombre_usuario,
+.item .nombre_usuario,
+.item .rareza,
+.item .tamaño_inventario,
+.item .vender_item,
 .item .precio_item{
   width: 20%;
   height: 8em;
@@ -94,6 +98,10 @@ footer {
 .item:hover .foto_item,
 .item:hover .nombre_item,
 .item:hover .nombre_usuario,
+.item:hover .nombre_usuario,
+.item:hover .rareza,
+.item:hover .tamaño_inventario,
+.item:hover .vender_item,
 .item:hover .precio_item {
   background-color: hsla(0, 0%, 100%, 0.08);
 }

@@ -35,9 +35,16 @@ class Item {
 
     public static function obtenerRareza($nombreItem){
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $sql = sprintf("SELECT DISTINCT rareza FROM items WHERE nombre='%s'",$conn->real_escape_string($nombreItem));
+        $sql = sprintf("SELECT rareza FROM items WHERE nombre='%s'", $conn->real_escape_string($nombreItem));
         $result = $conn->query($sql);
-        return $result;
+        if (!$result) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            return false;
+        }
+        $rarezaRow = $result->fetch_assoc();
+        $rareza = $rarezaRow['rareza'];
+        $result->free();
+        return $rareza;
     }
 
     public static function actualizarItemInventario($idUsuario, $item) {

@@ -10,13 +10,13 @@ class Item_subastas
 {
     public static function itemsSubastas($id_usuario)
     {
-        Item_subastas::actualizarTiempoRestante();
+        self::actualizarTiempoRestante();
         $conn = Aplicacion::getInstance()->getConexionBd();
         $listaSubastas = [];
         $sql = sprintf(
             "SELECT * FROM subastas WHERE id_usuario != %d AND id_licitador != %d",
-            $conn->real_escape_string($id_usuario),
-            $conn->real_escape_string($id_usuario)
+            $id_usuario,
+            $id_usuario)
         );
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -30,12 +30,12 @@ class Item_subastas
 
     public static function itemsPujas($licitador)
     {
-        Item_subastas::actualizarTiempoRestante();
+        self::actualizarTiempoRestante();
         $conn = Aplicacion::getInstance()->getConexionBd();
         $listaPujas = [];
         $sql = sprintf(
             "SELECT * FROM subastas WHERE id_licitador = %d",
-            $conn->real_escape_string($licitador)
+            $licitador
         );
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -53,7 +53,7 @@ class Item_subastas
         $listaSubastas = [];
         $sql = sprintf(
             "SELECT * FROM subastas WHERE id_usuario = %d", 
-            $conn->real_escape_string($id_usuario)
+            $id_usuario
         );
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -83,22 +83,17 @@ class Item_subastas
             $intervalo = $tiempo_actual->diff($tiempo_limite);
             
             if ($tiempo_actual >= $tiempo_limite){
-                Item_subastas::terminarSubasta($id_subasta);
+                self::terminarSubasta($id_subasta);
             }
             else{
                 $dias = $intervalo->d;
                 $horas = $intervalo->h;
                 $minutos = $intervalo->i;
-                $tiempo_restante = sprintf(
-                    "%d:%d:%d", 
-                    $conn->real_escape_string($dias), 
-                    $conn->real_escape_string($horas), 
-                    $conn->real_escape_string($minutos)
-                );
+                $tiempo_restante = sprintf("%d:%d:%d", $dias, $horas, $minutos);
                 $update = sprintf(
                     "UPDATE subastas SET tiempo_restante = '%s' WHERE id_subasta = %d",
                     $conn->real_escape_string($tiempo_restante),
-                    $conn->real_escape_string($id_subasta)
+                    $id_subasta
                 );
                 $conn->query($update);
             }
@@ -114,14 +109,14 @@ class Item_subastas
         $nombreItem = $item->getNombre();
 
         $fechaLimite = time() + (72 * 3600);
-        $fechaLimiteSql = date('Y-m-d H:i:s', $conn->real_escape_string($fechaLimite));
+        $fechaLimiteSql = date('Y-m-d H:i:s', $fechaLimite);
 
         do {
             $id_subasta = rand(1, 1000); 
             $comprobacion = sprintf(
                 "SELECT id_subasta FROM subastas WHERE id_usuario = %d AND id_subasta = %d", 
-                $conn->real_escape_string($id_usuario), 
-                $conn->real_escape_string($id_subasta)
+                $id_usuario, 
+                $id_subasta
             );
             $result = $conn->query($comprobacion);
         } while ($result->num_rows > 0); 

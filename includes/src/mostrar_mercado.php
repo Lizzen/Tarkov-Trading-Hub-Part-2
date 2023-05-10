@@ -17,7 +17,7 @@ function muestra_inicio()
             <div class="box">
                 <div class="title">Comprar</div>
                 <div class="details">
-                    <button class="detail-button" onclick="window.location.href='mercado.php'">Ver detalles</button>
+                    <button class="detail-button" onclick="window.location.href='mercado.php?id=compra'">Ver detalles</button>
                 </div>
             </div>
         
@@ -28,12 +28,12 @@ function muestra_inicio()
                 </div>
             </div>
         
-            <div class="box">
+            <!--<div class="box">
                 <div class="title">Mis ventas</div>
                 <div class="details">
                     <button class="detail-button" onclick="window.location.href='venta.php'">Ver detalles</button>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>  
     EOS;
@@ -52,10 +52,11 @@ function listarCompras()
     foreach ($listaItems as $venta) {
         $precio = $venta->getPrecio();
         $tipo = $venta->getTipo();
+        $nombre_item = $venta->getNombre_intercambio();
         if ($tipo == "intercambio") {
-            $precio = "<span class='precio-intercambio'> <img src='./css/img/img_items/{$venta->getNombre_intercambio()}.png' alt='{$venta->getNombre_intercambio()}'/></span>";
+            $precio = "<span class='precio-intercambio'> <img src='./css/img/img_items/{$nombre_item}.png' alt='{$nombre_item}'/></span>";
         } else if ($tipo == "dual") {
-            $precio .= "<span class='precio-intercambio'>$ & <img src='./css/img/img_items/{$venta->getNombre_intercambio()}.png' alt='{$venta->getNombre_intercambio()}'/></span>";
+            $precio .= "<span class='precio-intercambio'><->$nombre_item</span>";
         }
 
         $formularioCompra = new FormularioCompra($venta, $_SESSION['idUsuario']);
@@ -94,6 +95,7 @@ function listarCompras()
         <div class = "div-opacidad">Nombre item</div>
         <div class = "div-opacidad">Nombre usuario</div>
         <div class = "div-opacidad">Precio</div>
+        <div class = "div-opacidad">intercambio</div>
         <div class = "div-opacidad">Comprar</div>
     </div>
     <div class="lista_items">

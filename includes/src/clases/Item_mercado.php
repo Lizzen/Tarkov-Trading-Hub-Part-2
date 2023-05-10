@@ -9,7 +9,7 @@ class Item_mercado
 {
     public static function venderItem($idventa, $nombreItem, $id_usuario, $tipo, $precio, $nombre_item_cambio) {
         $item = new Item_mercado($idventa, $nombreItem, $id_usuario, $tipo, $precio, $nombre_item_cambio);
-        $rareza = Item::obtenerRareza($item->getNombre());
+        $rareza = Item::obtenerRareza($nombreItem);
         Item::borrarDeInventario($item->getNombre(), $id_usuario, $rareza);
         self::aniadirItemMercado($item);
     }
@@ -17,8 +17,8 @@ class Item_mercado
     public static function aniadirItemMercado($item) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $insert = sprintf("INSERT INTO `ventas_mercado` (`id_usuario`, `nombre_item`, `tipo`, `precio`, `nombre_intercambio`) 
-                            VALUES (%d, '%s', '%s', %d, ,'%s')", 
-                            $item->getId_usuario(), $conn->real_escape_string($item->getNombreItem()), $conn->real_escape_string($item->getTipo()),
+                            VALUES (%d, '%s', '%s', %d, '%s')", 
+                            $item->getId_usuario(), $conn->real_escape_string($item->getNombre()), $conn->real_escape_string($item->getTipo()),
                             $item->getPrecio(), $conn->real_escape_string($item->getNombre_intercambio()));
         if (!$conn->query($insert)) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
@@ -60,14 +60,14 @@ class Item_mercado
                 // Mandar dinero a vendedor
                 Usuario::sumaDinero($item->getPrecio(), $item->getId_usuario());
 
-                Item_mercado::borraPorItemYUsuario($item->getNombre(), $item->getId_usuario());
+                Item_mercado::borraPorItemYUsuario($item->getNombre(), $item->getId_usuario(), $item->getId());
                 break;
 
             case 'intercambio':
                 // Pasan item a tu inventario ¿comprobar si cabe item?
                 Item::aniadirAInventario($item, $id_usuario_comprador);
 
-                Item_mercado::borraPorItemYUsuario($item->getNombre(), $item->getId_usuario());
+                Item_mercado::borraPorItemYUsuario($item->getNombre(), $item->getId_usuario(), $item->getId());
                 break;
 
             case 'dual':
@@ -80,19 +80,20 @@ class Item_mercado
                 Item::aniadirAInventario($item, $item->getId_usuario());
 
                 // Eliminar item mercado
-                Item_mercado::borraPorItemYUsuario($item->getNombre(), $item->getId_usuario());
+                Item_mercado::borraPorItemYUsuario($item->getNombre(), $item->getId_usuario(), $item->getId());
                 break;
         }
     }
 
 
-    public static function borraPorItemYUsuario($nombre_item, $id_usuario)
+    public static function borraPorItemYUsuario($nombre_item, $id_usuario, $id_venta)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf(
-            "DELETE FROM ventas_mercado WHERE id_usuario = %d AND nombre_item = '%s'",
+            "DELETE FROM ventas_mercado WHERE id_usuario = %d AND nombre_item = '%s' AND id_venta = %d",
             $conn->real_escape_string($id_usuario),
-            $conn->real_escape_string($nombre_item)
+            $conn->real_escape_string($nombre_item),
+            $conn->real_escape_string($id_venta)
         );
         if (!$conn->query($query)) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
