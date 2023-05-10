@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-05-2023 a las 21:17:30
+-- Tiempo de generación: 10-05-2023 a las 18:12:15
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -31,8 +31,8 @@ CREATE TABLE `inventario_usuario` (
   `id_usuario` int(255) NOT NULL,
   `id_inv` int(10) NOT NULL,
   `nombre_item` varchar(255) NOT NULL,
-  `pos_x` int(10) NOT NULL,
-  `pos_y` int(10) NOT NULL
+  `pos_x` int(10) NOT NULL DEFAULT 0,
+  `pos_y` int(10) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -152,7 +152,9 @@ ALTER TABLE `items`
 -- Indices de la tabla `subastas`
 --
 ALTER TABLE `subastas`
-  ADD PRIMARY KEY (`id_subasta`);
+  ADD PRIMARY KEY (`id_subasta`),
+  ADD KEY `fk_id_usuario_sub` (`id_usuario`);
+
 --
 -- Indices de la tabla `usuarios`
 --
@@ -200,17 +202,16 @@ ALTER TABLE `inventario_usuario`
   ADD CONSTRAINT `fk_nombre_item` FOREIGN KEY (`nombre_item`) REFERENCES `items` (`nombre`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `ventas_mercado`
---
-ALTER TABLE `ventas_mercado`
-  ADD CONSTRAINT `fk_id_usuario_mer` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
-
---
 -- Filtros para la tabla `subastas`
 --
 ALTER TABLE `subastas`
   ADD CONSTRAINT `fk_id_usuario_sub` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `ventas_mercado`
+--
+ALTER TABLE `ventas_mercado`
+  ADD CONSTRAINT `fk_id_usuario_mer` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

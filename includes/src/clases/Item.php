@@ -50,10 +50,10 @@ class Item {
     public static function actualizarItemInventario($idUsuario, $item) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $sql = sprintf("UPDATE inventario_usuario 
-                         SET pos_x='%s', pos_y='%s'
+                         SET pos_x= %d, pos_y= %d
                          WHERE id_usuario='%s' AND nombre_item='%s'",
-                        $conn->real_escape_string($item['x']),
-                        $conn->real_escape_string($item['y']),
+                        $item['x'],
+                        $item['y'],
                         $conn->real_escape_string($idUsuario),
                         $conn->real_escape_string($item['nombre']));
         $result = $conn->query($sql);
