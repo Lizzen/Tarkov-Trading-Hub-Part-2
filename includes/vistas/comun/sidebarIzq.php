@@ -23,7 +23,7 @@ $app = Aplicacion::getInstance();
 				<img src="./css/img/inventario_dorado.png" alt="inventario" class="icon-small" onclick="window.location.href='inventario.php'">
 			</div>
 			<div class="elem-details">
-					<a aria-current="page" href="./inventario.php" class="a-inventory" id="inventario">Inventario</a>
+					<a aria-current="page" href="./inventario.php" class="a-inventory">Inventario</a>
 			</div>
 		</div>
 
