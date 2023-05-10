@@ -123,11 +123,11 @@ class Usuario
                 <td>
                     <form method='POST' action='ruta/del/archivo'>
                         <input type='hidden' name='id' value='{$usuario->getId()}'>
-                        <input type='submit' value='Modificar'>
+                        <input type='submit' value='Modificar' class='btn'>
                     </form>
                     <form method='POST' action='./BorrarUsuario.php'>
                         <input type='hidden' name='id' value='{$usuario->getId()}'>
-                        <input type='submit' value='Eliminar'>
+                        <input type='submit' value='Eliminar' class='btn'>
                     </form>
                 </td>
             </tr>";
