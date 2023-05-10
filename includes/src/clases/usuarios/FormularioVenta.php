@@ -37,7 +37,7 @@ class FormularioVenta extends Formulario
             <legend>Elige un item para el intercambio</legend>
             $htmlNombres
             <legend>Pon un precio</legend>
-            <input type="number" name="precio" min="0">
+            <input type="number" name="precio" min="1">
             <div>
                 <button class="btn" type="submit" name="seleccion">Enviar</button>
                 <button class="btn" type="reset" name="borrar">Borrar</button>

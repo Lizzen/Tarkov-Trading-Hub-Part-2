@@ -18,7 +18,10 @@
 /*----------------------------------------------------------
   ----Función sidebar despegable totalmente funcional----
   ----------------------------------------------------------
+  No está implementada ya que no sirve de mucho
+  ----------------------------------------------------------*/
 
+/*
 // Seleccionar la imagen y los summaries
 const toggleSummaries = document.getElementById('toggleSummaries');
 const toggles = document.getElementsByTagName('summary');
