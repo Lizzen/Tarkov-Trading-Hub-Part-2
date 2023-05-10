@@ -4,7 +4,7 @@ require_once './includes/src/mostrar_inventario.php';
 
 use es\ucm\fdi\aw\clases\usuarios\Usuario;
 
-$user = Usuario::buscaPorId($_SESSION["idUsuario"]);
+$user = Usuario::buscaPorId($_SESSION['idUsuario']);
 $params['app']->doInclude('/vistas/helpers/plantilla.php');
 $mensajes = mensajesPeticionAnterior();
 ?>

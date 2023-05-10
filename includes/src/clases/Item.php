@@ -71,15 +71,15 @@ class Item {
         do {
             $idInv = rand(1, 1000); // Generamos un id aleatorio para el item
             $comprobacion = sprintf("SELECT id_inv FROM inventario_usuario WHERE id_usuario = %d AND id_inv = %d",
-                                $conn->real_escape_string($idUsuario), 
-                                $conn->real_escape_string($idInv)
+                                $idUsuario, 
+                                $idInv
                             );
             $result = $conn->query($comprobacion);
         } while ($result->num_rows > 0); // Si el id ya existe en la tabla, lo volvemos a intentar
 
         $insert = sprintf("INSERT INTO `inventario_usuario` (`id_usuario`, `id_inv`, `nombre_item`) VALUES (%d, %d, '%s')",
-                    $conn->real_escape_string($idUsuario), 
-                    $conn->real_escape_string($idInv), 
+                    $idUsuario, 
+                    $$idInv, 
                     $conn->real_escape_string($nombreItem)
                 );
         if (!$conn->query($insert)) {
@@ -96,7 +96,7 @@ class Item {
             INNER JOIN items it 
             ON it.nombre = iu.nombre_item 
             WHERE iu.id_usuario = %d AND it.nombre = '%s' AND it.rareza = '%s'", 
-            $conn->real_escape_string($idUsuario),
+            $idUsuario,
             $conn->real_escape_string($nombreItem),
             $conn->real_escape_string($rareza)
         );

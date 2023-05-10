@@ -18,7 +18,7 @@ include_once './includes/src/mostrar_mercado.php'
 	<main>
 		<div class="contenido">
 			<?= $params['contenidoPrincipal'] ?>
-			<?= 
+			<?php 
 				$id = $params['id'];
 				if ($id == 'inicio') {muestra_inicio();}
 				else {muestra_mercado();}
