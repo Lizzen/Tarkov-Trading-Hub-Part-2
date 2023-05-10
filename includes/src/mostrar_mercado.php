@@ -95,7 +95,7 @@ function listarCompras()
         <div class = "div-opacidad">Nombre item</div>
         <div class = "div-opacidad">Nombre usuario</div>
         <div class = "div-opacidad">Precio</div>
-        <div class = "div-opacidad">intercambio</div>
+        <div class = "div-opacidad">Intercambio</div>
         <div class = "div-opacidad">Comprar</div>
     </div>
     <div class="lista_items">

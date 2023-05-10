@@ -16,7 +16,7 @@ class Item_subastas
         $sql = sprintf(
             "SELECT * FROM subastas WHERE id_usuario != %d AND id_licitador != %d",
             $id_usuario,
-            $id_usuario)
+            $id_usuario
         );
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
