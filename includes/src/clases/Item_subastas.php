@@ -124,12 +124,12 @@ class Item_subastas
         
         $insert = sprintf(
             "INSERT INTO `subastas` (`id_subasta`, `id_usuario`, `nombre_item`, `tipo`, `precio`, `id_licitador`, `fecha_limite`, `tiempo_restante`) VALUES (%d, %d, '%s', '%s', %f, %d, '%s', '%s')", 
-            $conn->real_escape_string($id_subasta), 
-            $conn->real_escape_string($id_usuario), 
+            $id_subasta, 
+            $id_usuario, 
             $conn->real_escape_string($nombreItem), 
             $conn->real_escape_string($item->getRareza()),
-            $conn->real_escape_string($precio), 
-            $conn->real_escape_string(NULL), 
+            $precio, 
+            NULL, 
             $conn->real_escape_string($fechaLimiteSql), 
             $conn->real_escape_string(NULL)
         );
@@ -147,9 +147,9 @@ class Item_subastas
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf(
             "UPDATE subastas SET precio = %f, id_licitador = %d WHERE id_subasta = %d", 
-            $conn->real_escape_string($precio), 
-            $conn->real_escape_string($licitador), 
-            $conn->real_escape_string($id_subasta)
+            $precio, 
+            $licitador, 
+            $id_subasta
         );
         $result = $conn->query($query);
         if (!$result) {
@@ -166,7 +166,7 @@ class Item_subastas
         $conn = Aplicacion::getInstance()->getConexionBd();
         $itemSubasta = sprintf(
             "SELECT * FROM subastas WHERE id_subasta = %d",
-            $conn->real_escape_string($id_subasta)
+            $id_subasta
         );
         $result = $conn->query($itemSubasta);
         $row = $result->fetch_assoc();
@@ -183,7 +183,7 @@ class Item_subastas
     
         $query = sprintf(
             "DELETE FROM subastas WHERE id_subasta = '%d'",
-            $conn->real_escape_string($id_subasta)
+            $id_subasta
         );
         if (!$conn->query($query)) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");

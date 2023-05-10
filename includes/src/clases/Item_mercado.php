@@ -33,7 +33,7 @@ class Item_mercado
         $listaVentas = [];
         $sql = sprintf(
             "SELECT * FROM ventas_mercado WHERE id_usuario != %d",
-            $conn->real_escape_string($id_usuario)
+            $id_usuario
         );
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -91,9 +91,9 @@ class Item_mercado
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf(
             "DELETE FROM ventas_mercado WHERE id_usuario = %d AND nombre_item = '%s' AND id_venta = %d",
-            $conn->real_escape_string($id_usuario),
+            $id_usuario,
             $conn->real_escape_string($nombre_item),
-            $conn->real_escape_string($id_venta)
+            $id_venta
         );
         if (!$conn->query($query)) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
@@ -129,7 +129,7 @@ class Item_mercado
 
         $query = sprintf(
             "SELECT x, y, anchura, altura FROM inventario_usuario WHERE id_usuario = %d",
-            $conn->real_escape_string($idUsuario)
+            $idUsuario
         );
         $result = $conn->query($query);
         if (!$result) {
