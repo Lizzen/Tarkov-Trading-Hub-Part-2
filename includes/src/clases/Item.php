@@ -79,7 +79,7 @@ class Item {
 
         $insert = sprintf("INSERT INTO `inventario_usuario` (`id_usuario`, `id_inv`, `nombre_item`) VALUES (%d, %d, '%s')",
                     $idUsuario, 
-                    $$idInv, 
+                    $idInv, 
                     $conn->real_escape_string($nombreItem)
                 );
         if (!$conn->query($insert)) {
