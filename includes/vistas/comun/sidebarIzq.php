@@ -20,7 +20,7 @@ $app = Aplicacion::getInstance();
 
 		<div class="elem-caja">
 			<div class="elem-imagen">
-				<img src="./css/img/inventario_dorado.png" alt="inventario" class="icon-small" onclick="window.location.href='inventario.php'">
+				<img src="./css/img/Inventario_dorado.png" alt="inventario" class="icon-small" onclick="window.location.href='inventario.php'">
 			</div>
 			<div class="elem-details">
 					<a aria-current="page" href="./inventario.php" class="a-inventory">Inventario</a>
@@ -29,7 +29,7 @@ $app = Aplicacion::getInstance();
 
 		<div class="elem-caja">
 			<div class="elem-imagen">
-				<img src="./css/img/mercado_mini.png" alt="mercado" class="icon-small" onclick="window.location.href='mercado.php?id=inicio'">
+				<img src="./css/img/Mercado_mini.png" alt="mercado" class="icon-small" onclick="window.location.href='mercado.php?id=inicio'">
 			</div>
 			<div class="elem-details">
 				<details>
@@ -44,7 +44,7 @@ $app = Aplicacion::getInstance();
 
 		<div class="elem-caja">
 			<div class="elem-imagen">
-				<img src="./css/img/subasta_dorado.png" alt="subastas" class="icon-small" onclick="window.location.href='subastas.php?id=inicio'">
+				<img src="./css/img/Subasta_dorado.png" alt="subastas" class="icon-small" onclick="window.location.href='subastas.php?id=inicio'">
 			</div>
 			<div class="elem-details">
 				<details>
@@ -60,7 +60,7 @@ $app = Aplicacion::getInstance();
 
 		<div class="elem-caja">
 			<div class="elem-imagen">
-				<img src="./css/img/comunidad_mini.png" alt="comunidad" class="icon-small" onclick="window.location.href='comunidad.php'">
+				<img src="./css/img/Comunidad_mini.png" alt="comunidad" class="icon-small" onclick="window.location.href='comunidad.php'">
 			</div>
 			<div class="elem-details">
 				<details>

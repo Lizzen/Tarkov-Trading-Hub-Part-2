@@ -17,7 +17,7 @@ $mensajes = mensajesPeticionAnterior();
   <?= $mensajes ?>
   <main>
     <div class="logo">
-        <a href="index.php"><img src="./css/img/Logo.PNG" alt="Logo" height="100" /></a>
+        <a href="index.php"><img src="./css/img/Logo.png" alt="Logo" height="100" /></a>
       </div>
     <div class="contenido">
       <?= $params['contenidoPrincipal'] ?>

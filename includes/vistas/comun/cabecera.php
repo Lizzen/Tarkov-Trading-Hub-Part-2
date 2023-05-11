@@ -31,7 +31,7 @@ function mostrarSaludo()
 
 <header>
   <div class="logo">
-    <a href="index.php"><img src="./css/img/logo_sin_fondo.PNG" alt="Logo" height="100" /></a>
+    <a href="index.php"><img src="./css/img/logo_sin_fondo.png" alt="Logo" height="100" /></a>
   </div>
   <div class="saludo">
     <?= mostrarSaludo(); ?>
