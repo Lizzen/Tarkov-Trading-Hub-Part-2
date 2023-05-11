@@ -1,0 +1,56 @@
+# Deny access to all hidden files and directories
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</FilesMatch>
+
+# Disable directory listing
+Options -Indexes
+
+# Disable server signature
+ServerSignature Off
+
+# Block common exploits and hacking attempts
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{REQUEST_URI} \.php[s0-9a-fA-F]{0,2} [NC,OR]
+    RewriteCond %{REQUEST_URI} ^/(inc|uploads|uploads_secure)/ [NC,OR]
+    RewriteCond %{REQUEST_METHOD} ^(HEAD|TRACE|DELETE|TRACK) [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
+    RewriteCond %{HTTP_REFERER} ^(.*)(<|>|'|%0A|%0D|%27|%3C|%3E|%00)(.*)$ [NC,OR]
+    RewriteCond %{HTTP_COOKIE} ^.*(;|<|>|'|"|\)|\(|%0A|%0D|%22|%27|%3C|%3E|%00).* [NC,OR]
+    RewriteCond %{HTTP_ACCEPT_LANGUAGE} ^$ [OR]
+    RewriteCond %{HTTP_ACCEPT_CHARSET} ^$ [OR]
+    RewriteCond %{HTTP_REFERER} ^http://(www\.)?.*google [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Mozilla/5.0\ \(Windows\ NT\ 5\.1;\ rv:40\.0\)\ Gecko/20100101\ Firefox/40.0$ [NC]
+    RewriteRule ^(.*)$ - [F,L]
+</IfModule>
+
+# Prevent access to sensitive files and directories
+<FilesMatch "(^\.|wp-config\.php|php\.ini|\.(bak|inc|sh|sql|swp)|/wp-content/(debug.log|uploads_secure|uploads/.*\.php))">
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</FilesMatch>
+
+# Limit file upload size to prevent denial of service (DOS) attacks
+<IfModule mod_php5.c>
+    php_value upload_max_filesize 50M
+    php_value post_max_size 50M
+</IfModule>
+
+# Prevent clickjacking and XSS attacks
+<IfModule mod_headers.c>
+    Header set X-Frame-Options SAMEORIGIN
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Deny access to backup and log files
+<FilesMatch "(^\.|/)(CVS|Logs|bak|backup|backups|back|log|logs|Log|tmp|config\.inc\.php|config\.php|sqlbackup\.php)">
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</FilesMatch>
